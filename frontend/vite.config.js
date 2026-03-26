@@ -12,6 +12,16 @@ export default defineConfig({
       },
     },
   },
+  preview: {
+    port: 3103,
+    host: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3102',
+        changeOrigin: true,
+      },
+    },
+  },
   build: {
     outDir: 'dist',
     sourcemap: false,

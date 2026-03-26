@@ -21,7 +21,12 @@ app.use(helmet({
 }));
 
 app.use(cors({
-  origin: config.server.frontendUrl,
+  origin: [
+    config.server.frontendUrl,
+    'http://localhost:3103',
+    'http://84.247.135.213:3103',
+    'http://84.247.135.213',
+  ],
   credentials: true,
 }));
 
@@ -43,16 +48,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// ============================================================
-// Serve frontend statico in produzione
-// ============================================================
-if (config.server.nodeEnv === 'production') {
-  const frontendPath = path.join(__dirname, '../../frontend/dist');
-  app.use(express.static(frontendPath));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(frontendPath, 'index.html'));
-  });
-}
+// Frontend servito separatamente su porta 3103
 
 // ============================================================
 // Error handler globale
