@@ -155,7 +155,7 @@ export default function AdminStudenti() {
             ) : (
               filtered.map(s => (
                 <tr key={s.id}>
-                  <td>
+                  <td data-label="Stato">
                     {s.checkin_effettuato ? (
                       <span style={{ color: 'var(--color-success)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
                         <UserCheck size={16} /> Presente
@@ -166,7 +166,7 @@ export default function AdminStudenti() {
                       </span>
                     )}
                   </td>
-                  <td>
+                  <td data-label="Studente">
                     <div style={{ fontWeight: 600, color: 'var(--color-white)' }}>
                       {s.cognome} {s.nome}
                     </div>
@@ -179,12 +179,12 @@ export default function AdminStudenti() {
                       </div>
                     )}
                   </td>
-                  <td>
+                  <td data-label="Ticket">
                     <span style={{ fontFamily: 'monospace', background: 'rgba(255,255,255,0.1)', padding: '4px 8px', borderRadius: '4px' }}>
                       {s.ticket_code}
                     </span>
                   </td>
-                  <td>
+                  <td data-label="Scuola & Classe">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <School size={14} color="var(--color-teal-light)" />
                       {s.scuola_nome || 'Nessuna (Docente/Privato)'}
@@ -195,8 +195,10 @@ export default function AdminStudenti() {
                       </div>
                     )}
                   </td>
-                  <td style={{ fontSize: '0.85rem', color: 'var(--color-gray-500)' }}>
-                    {new Date(s.created_at).toLocaleString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })}
+                  <td data-label="Data iscr.">
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-gray-500)' }}>
+                      {new Date(s.created_at).toLocaleString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })}
+                    </span>
                   </td>
                 </tr>
               ))

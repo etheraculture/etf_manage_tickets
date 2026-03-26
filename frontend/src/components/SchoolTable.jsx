@@ -23,14 +23,14 @@ export default function SchoolTable({ schools, onEdit, onToggle, onDelete }) {
         <tbody>
           {schools.map((school) => (
             <tr key={school.id}>
-              <td>{school.nome}</td>
-              <td>{school.citta || '—'}</td>
-              <td>
+              <td data-label="Nome">{school.nome}</td>
+              <td data-label="Città">{school.citta || '—'}</td>
+              <td data-label="Stato">
                 <span className={`badge ${school.attiva ? 'badge-success' : 'badge-error'}`}>
                   {school.attiva ? 'Attiva' : 'Disattivata'}
                 </span>
               </td>
-              <td>
+              <td data-label="Azioni">
                 <div className="actions">
                   <button className="btn btn-secondary btn-sm" onClick={() => onEdit(school)} title="Modifica">
                     <Edit3 size={14} />

@@ -6,7 +6,7 @@ import QrScanner from '../components/QrScanner';
 import CheckinResult from '../components/CheckinResult';
 
 export default function AdminCheckin() {
-  const [mode, setMode] = useState('manual'); // 'qr' | 'manual'
+  const [mode, setMode] = useState('qr'); // 'qr' | 'manual'
   const [manualCode, setManualCode] = useState('');
   const [result, setResult] = useState(null);
   const [processing, setProcessing] = useState(false);
@@ -99,23 +99,7 @@ export default function AdminCheckin() {
     <div>
       <div className="admin-page-header">
         <h1 className="admin-page-title">CHECK-IN</h1>
-        <p className="admin-page-subtitle">Scansiona QR code o inserisci il codice manualmente</p>
-      </div>
-
-      {/* Mode selector */}
-      <div style={{ display: 'flex', gap: 12, marginBottom: 32, justifyContent: 'center' }}>
-        <button
-          className={`btn ${mode === 'manual' ? 'btn-primary' : 'btn-secondary'}`}
-          onClick={() => switchMode('manual')}
-        >
-          <Keyboard size={18} /> Inserimento Manuale
-        </button>
-        <button
-          className={`btn ${mode === 'qr' ? 'btn-primary' : 'btn-secondary'}`}
-          onClick={() => switchMode('qr')}
-        >
-          <ScanLine size={18} /> Scanner QR
-        </button>
+        <p className="admin-page-subtitle">{mode === 'qr' ? 'Inquadra il QR Code del biglietto' : 'Inserisci il codice a 6 caratteri'}</p>
       </div>
 
       {/* Scanner QR */}
@@ -140,9 +124,27 @@ export default function AdminCheckin() {
             autoFocus
             disabled={processing}
           />
-          <p style={{ textAlign: 'center', color: 'var(--color-gray-500)', fontSize: '0.85rem', marginTop: 12 }}>
-            Inserisci il codice a 6 caratteri — invio automatico
-          </p>
+        </div>
+      )}
+
+      {/* Mode Toggle Link */}
+      {!result && !processing && (
+        <div style={{ textAlign: 'center', marginTop: 32 }}>
+          {mode === 'qr' ? (
+            <button 
+              onClick={() => switchMode('manual')} 
+              style={{ background: 'none', border: 'none', color: 'var(--color-teal-light)', fontSize: '0.9rem', textDecoration: 'underline', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', margin: '0 auto' }}
+            >
+              <Keyboard size={16} /> Inserimento Manuale
+            </button>
+          ) : (
+            <button 
+              onClick={() => switchMode('qr')} 
+              style={{ background: 'none', border: 'none', color: 'var(--color-teal-light)', fontSize: '0.9rem', textDecoration: 'underline', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', margin: '0 auto' }}
+            >
+              <ScanLine size={16} /> Usa lo Scanner QR
+            </button>
+          )}
         </div>
       )}
 

@@ -69,18 +69,18 @@ export default function AdminScansioni() {
             <tbody>
               {scansioni.map(s => (
                 <tr key={s.id}>
-                  <td style={{ whiteSpace: 'nowrap' }}>
+                  <td data-label="Ora" style={{ whiteSpace: 'nowrap' }}>
                     {new Date(s.scansionato_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                   </td>
-                  <td>
+                  <td data-label="Codice">
                     <span style={{ fontFamily: "'Courier New', monospace", fontWeight: 700, letterSpacing: 2 }}>
                       {s.codice}
                     </span>
                   </td>
-                  <td><strong>{s.nome} {s.cognome}</strong></td>
-                  <td>{s.scuola}</td>
-                  <td>{s.classe}</td>
-                  <td>
+                  <td data-label="Nome"><strong>{s.nome} {s.cognome}</strong></td>
+                  <td data-label="Scuola">{s.scuola}</td>
+                  <td data-label="Classe">{s.classe}</td>
+                  <td data-label="Metodo">
                     <span className={`badge ${s.metodo === 'qr_scan' ? 'badge-teal' : 'badge-warning'}`}>
                       {s.metodo === 'qr_scan' ? 'QR Scan' : 'Manuale'}
                     </span>
