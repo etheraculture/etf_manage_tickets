@@ -36,7 +36,7 @@ router.post(
     body('cognome').trim().isLength({ min: 2, max: 100 }).withMessage('Cognome: 2-100 caratteri'),
     body('eta').isInt({ min: 13, max: 99 }).withMessage('Età: 13-99'),
     body('citta').trim().isLength({ min: 2, max: 100 }).withMessage('Città non valida'),
-    body('email').isEmail().normalizeEmail().withMessage('Email non valida'),
+    body('email').trim().toLowerCase().isEmail().withMessage('Email non valida'),
     body('scuola_id').isInt({ min: 1 }).withMessage('Scuola non selezionata'),
     body('classe').trim().isLength({ min: 1, max: 20 }).withMessage('Classe non valida'),
     body('rappresentante_istituto').optional().isBoolean(),
