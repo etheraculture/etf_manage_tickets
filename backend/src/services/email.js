@@ -40,7 +40,7 @@ async function getAccessToken() {
 /**
  * Genera il template HTML dell'email di conferma.
  */
-function buildEmailHtml(nome, codiceBiglietto, qrBase64) {
+function buildEmailHtml(nome, codiceBiglietto) {
   return `
 <!DOCTYPE html>
 <html lang="it">
@@ -105,7 +105,7 @@ function buildEmailHtml(nome, codiceBiglietto, qrBase64) {
                   QR Code di accesso
                 </p>
                 <div style="display:inline-block;background:#FFFFFF;padding:12px;border-radius:12px;">
-                  <img src="${qrBase64}" alt="QR Code" width="200" height="200" style="display:block;" />
+                  <img src="cid:qrcode" alt="QR Code" width="200" height="200" style="display:block;" />
                 </div>
               </div>
 
@@ -143,7 +143,10 @@ async function sendConfirmationEmail(toEmail, nome, codiceBiglietto, qrBase64) {
       return false;
     }
 
-    const htmlContent = buildEmailHtml(nome, codiceBiglietto, qrBase64);
+    const htmlContent = buildEmailHtml(nome, codiceBiglietto);
+    
+    // Extract base64 raw data (remove "data:image/png;base64,")
+    const base64Data = qrBase64.split(',')[1];
 
     const mailPayload = {
       message: {
@@ -155,6 +158,16 @@ async function sendConfirmationEmail(toEmail, nome, codiceBiglietto, qrBase64) {
         toRecipients: [
           { emailAddress: { address: toEmail } },
         ],
+        attachments: [
+          {
+            "@odata.type": "#microsoft.graph.fileAttachment",
+            name: "qrcode.png",
+            contentType: "image/png",
+            contentBytes: base64Data,
+            isInline: true,
+            contentId: "qrcode"
+          }
+        ]
       },
     };
 
