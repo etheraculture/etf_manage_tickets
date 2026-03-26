@@ -197,14 +197,15 @@ router.get('/studenti', authMiddleware, async (req, res) => {
         r.nome, 
         r.cognome, 
         r.email, 
-        r.ticket_code, 
-        r.checkin_effettuato, 
-        r.checkin_timestamp,
+        r.codice_biglietto as ticket_code, 
+        IF(c.id IS NOT NULL, 1, 0) as checkin_effettuato, 
+        c.scansionato_at as checkin_timestamp,
         r.created_at,
         r.classe,
         s.nome as scuola_nome
       FROM registrazioni r
       LEFT JOIN scuole s ON r.scuola_id = s.id
+      LEFT JOIN checkins c ON r.id = c.registrazione_id
       ORDER BY r.created_at DESC
     `;
     const [rows] = await db.query(query);
