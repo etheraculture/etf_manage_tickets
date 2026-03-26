@@ -1,7 +1,14 @@
 import axios from 'axios';
 
+// In dev (Vite proxy su localhost:5173) usa /api
+// In produzione usa direttamente il backend sulla porta 3102
+const isDevProxy = window.location.port === '5173';
+const baseURL = isDevProxy
+  ? '/api'
+  : `http://${window.location.hostname}:3102/api`;
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL,
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
@@ -23,7 +30,6 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('ethera_admin_token');
-      // Redirect al login solo se siamo in area admin
       if (window.location.pathname.startsWith('/admin') && window.location.pathname !== '/admin') {
         window.location.href = '/admin';
       }
