@@ -31,7 +31,7 @@ git push origin main
 # 2. Copia il file .env sul server (non è nel repo)
 echo ""
 echo "🔑 Upload .env sul server..."
-scp "$LOCAL_DIR/backend/.env" "$SERVER_USER@$SERVER_IP:$SERVER_PATH/backend/.env" 2>/dev/null || echo "   ⚠️  .env non trovato o upload fallito"
+scp "$LOCAL_DIR/backend/.env" "$SERVER_USER@$SERVER_IP:$SERVER_PATH/backend/.env"
 
 # 3. Esegui comandi sul server via SSH
 echo ""
