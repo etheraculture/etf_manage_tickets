@@ -184,4 +184,35 @@ router.delete('/scuole/:id', async (req, res) => {
   }
 });
 
+// ============================================================
+// STUDENTI
+// ============================================================
+
+// Ottieni tutti gli studenti registrati con le loro scuole
+router.get('/studenti', authMiddleware, async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        r.id, 
+        r.nome, 
+        r.cognome, 
+        r.email, 
+        r.ticket_code, 
+        r.checkin_effettuato, 
+        r.checkin_timestamp,
+        r.created_at,
+        r.classe,
+        s.nome as scuola_nome
+      FROM registrazioni r
+      LEFT JOIN scuole s ON r.scuola_id = s.id
+      ORDER BY r.created_at DESC
+    `;
+    const [rows] = await db.query(query);
+    res.json({ data: rows });
+  } catch (error) {
+    console.error('Errore get studenti:', error);
+    res.status(500).json({ error: 'Errore interno del server' });
+  }
+});
+
 module.exports = router;

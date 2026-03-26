@@ -1,11 +1,11 @@
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, School, ScanLine, ClipboardList, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, School, ScanLine, ClipboardList, LogOut, Menu, X, Users } from 'lucide-react';
 import { useState } from 'react';
 
 const navItems = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/admin/scuole', label: 'Scuole', icon: School },
-  { to: '/admin/checkin', label: 'Check-in', icon: ScanLine },
+  { to: '/admin/studenti', label: 'Studenti', icon: Users },
   { to: '/admin/scansioni', label: 'Scansioni', icon: ClipboardList },
 ];
 
@@ -45,6 +45,16 @@ export default function AdminLayout({ children }) {
               {item.label}
             </NavLink>
           ))}
+          {/* Il pulsante Check-in su Desktop è nella sidebar ma nascosto su mobile */}
+          <NavLink
+            to="/admin/checkin"
+            className={({ isActive }) =>
+              `nav-item sidebar-link desktop-only-link ${isActive ? 'active' : ''}`
+            }
+          >
+            <ScanLine size={20} />
+            Check-in Scanner
+          </NavLink>
         </nav>
 
         <div className="sidebar-footer">
@@ -59,6 +69,33 @@ export default function AdminLayout({ children }) {
       <main className="admin-main">
         {children}
       </main>
+
+      {/* Mobile Nav Footer */}
+      <nav className="mobile-bottom-nav">
+        <NavLink to="/admin/dashboard" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}>
+          <LayoutDashboard size={24} />
+          <span>Dash</span>
+        </NavLink>
+        <NavLink to="/admin/studenti" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}>
+          <Users size={24} />
+          <span>List</span>
+        </NavLink>
+
+        <div className="mobile-nav-fab-container">
+          <NavLink to="/admin/checkin" className="mobile-nav-fab">
+            <ScanLine size={32} />
+          </NavLink>
+        </div>
+
+        <NavLink to="/admin/scuole" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}>
+          <School size={24} />
+          <span>Scuole</span>
+        </NavLink>
+        <button onClick={handleLogout} className="mobile-nav-item text-error">
+          <LogOut size={24} />
+          <span>Esci</span>
+        </button>
+      </nav>
 
       {/* Mobile overlay */}
       {mobileOpen && (

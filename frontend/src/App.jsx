@@ -6,6 +6,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminScuole from './pages/AdminScuole';
 import AdminCheckin from './pages/AdminCheckin';
 import AdminScansioni from './pages/AdminScansioni';
+import AdminStudenti from './pages/AdminStudenti';
 import AdminLayout from './components/AdminLayout';
 
 function ProtectedRoute({ children }) {
@@ -38,6 +39,14 @@ export default function App() {
         element={
           <ProtectedRoute>
             <AdminLayout><AdminScuole /></AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/studenti"
+        element={
+          <ProtectedRoute>
+            <AdminLayout><AdminStudenti /></AdminLayout>
           </ProtectedRoute>
         }
       />
