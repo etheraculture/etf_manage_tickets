@@ -18,6 +18,7 @@ const app = express();
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
   contentSecurityPolicy: false, // Disabilitato per permettere inline styles nelle email
+  crossOriginOpenerPolicy: false, // Disabilitato per HTTP su indirizzi IP
 }));
 
 app.use(cors({
