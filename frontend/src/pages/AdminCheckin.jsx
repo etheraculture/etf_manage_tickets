@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { ScanLine, Keyboard } from 'lucide-react';
+import { ScanLine, Keyboard, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../api/client';
 import QrScanner from '../components/QrScanner';
 import CheckinResult from '../components/CheckinResult';
 
 export default function AdminCheckin() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState('qr'); // 'qr' | 'manual'
   const [manualCode, setManualCode] = useState('');
   const [result, setResult] = useState(null);
@@ -97,9 +99,14 @@ export default function AdminCheckin() {
 
   return (
     <div>
-      <div className="admin-page-header">
-        <h1 className="admin-page-title">CHECK-IN</h1>
-        <p className="admin-page-subtitle">{mode === 'qr' ? 'Inquadra il QR Code del biglietto' : 'Inserisci il codice a 6 caratteri'}</p>
+      <div className="admin-page-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+        <button className="back-btn" onClick={() => navigate(-1)} aria-label="Torna indietro">
+          <ArrowLeft size={28} />
+        </button>
+        <div>
+          <h1 className="admin-page-title">CHECK-IN</h1>
+          <p className="admin-page-subtitle">{mode === 'qr' ? 'Inquadra il QR Code del biglietto' : 'Inserisci il codice a 6 caratteri'}</p>
+        </div>
       </div>
 
       {/* Scanner QR */}

@@ -1,10 +1,12 @@
 import { useState, useEffect, Fragment } from 'react';
-import { Users, ScanLine, Award, ChevronRight } from 'lucide-react';
+import { Users, ScanLine, Award, ChevronRight, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../api/client';
 import StatsCard from '../components/StatsCard';
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState({});
@@ -43,9 +45,14 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <div className="admin-page-header">
-        <h1 className="admin-page-title">DASHBOARD</h1>
-        <p className="admin-page-subtitle">Panoramica iscrizioni e presenze</p>
+      <div className="admin-page-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+        <button className="back-btn" onClick={() => navigate(-1)} aria-label="Torna indietro">
+          <ArrowLeft size={28} />
+        </button>
+        <div>
+          <h1 className="admin-page-title">DASHBOARD</h1>
+          <p className="admin-page-subtitle">Panoramica iscrizioni e presenze</p>
+        </div>
       </div>
 
       <div className="stats-grid">

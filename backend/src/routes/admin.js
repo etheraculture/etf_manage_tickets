@@ -171,13 +171,20 @@ router.put('/scuole/:id', async (req, res) => {
 
 /**
  * DELETE /api/admin/scuole/:id
- * Soft delete: disattiva la scuola.
+ * Hard delete: rimuove la scuola SOLO se non ci sono registrazioni collegate.
  */
 router.delete('/scuole/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    await pool.execute('UPDATE scuole SET attiva = FALSE WHERE id = ?', [id]);
-    res.json({ success: true });
+    
+    // Check for existing students
+    const [rows] = await pool.execute('SELECT COUNT(*) as count FROM registrazioni WHERE scuola_id = ?', [id]);
+    if (rows[0].count > 0) {
+      return res.status(409).json({ error: 'Impossibile eliminare: ci sono studenti iscritti a questa scuola.' });
+    }
+
+    await pool.execute('DELETE FROM scuole WHERE id = ?', [id]);
+    res.json({ success: true, message: 'Scuola eliminata definitivamente' });
   } catch (err) {
     console.error('Errore DELETE /api/admin/scuole:', err);
     res.status(500).json({ error: 'Errore interno del server' });
@@ -214,6 +221,70 @@ router.get('/studenti', authMiddleware, async (req, res) => {
   } catch (error) {
     console.error('Errore get studenti:', error);
     res.status(500).json({ error: 'Errore interno del server' });
+  }
+});
+
+/**
+ * PUT /api/admin/studenti/:id
+ * Modifica dati studente
+ */
+router.put('/studenti/:id', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nome, cognome, email, classe, scuola_id, rappresentante_istituto } = req.body;
+
+    const updates = [];
+    const values = [];
+
+    if (nome !== undefined) { updates.push('nome = ?'); values.push(nome.trim()); }
+    if (cognome !== undefined) { updates.push('cognome = ?'); values.push(cognome.trim()); }
+    if (email !== undefined) { updates.push('email = ?'); values.push(email.trim()); }
+    if (classe !== undefined) { updates.push('classe = ?'); values.push(classe.trim()); }
+    if (scuola_id !== undefined) { updates.push('scuola_id = ?'); values.push(scuola_id ? parseInt(scuola_id) : null); }
+    if (rappresentante_istituto !== undefined) { updates.push('rappresentante_istituto = ?'); values.push(rappresentante_istituto ? 1 : 0); }
+
+    if (updates.length === 0) {
+      return res.status(400).json({ error: 'Nessun campo da aggiornare' });
+    }
+
+    values.push(id);
+    await pool.execute(
+      `UPDATE registrazioni SET ${updates.join(', ')} WHERE id = ?`,
+      values
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Errore PUT /api/admin/studenti:', error);
+    res.status(500).json({ error: 'Errore interno del server' });
+  }
+});
+
+/**
+ * DELETE /api/admin/studenti/:id
+ * Elimina studente (prima cancella eventuali check-in)
+ */
+router.delete('/studenti/:id', authMiddleware, async (req, res) => {
+  // Use connection to ensure atomicity if needed, or simple sequential executes
+  const connection = await pool.getConnection();
+  try {
+    const { id } = req.params;
+    await connection.beginTransaction();
+
+    // Elimina i check-in collegati per evitare vincoli di foreign key
+    await connection.execute('DELETE FROM checkins WHERE registrazione_id = ?', [id]);
+    
+    // Elimina la registrazione
+    await connection.execute('DELETE FROM registrazioni WHERE id = ?', [id]);
+
+    await connection.commit();
+    res.json({ success: true, message: 'Studente eliminato' });
+  } catch (error) {
+    await connection.rollback();
+    console.error('Errore DELETE /api/admin/studenti:', error);
+    res.status(500).json({ error: 'Errore interno del server' });
+  } finally {
+    connection.release();
   }
 });
 

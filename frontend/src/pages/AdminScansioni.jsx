@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Calendar, ScanLine } from 'lucide-react';
+import { Calendar, ScanLine, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../api/client';
 
 export default function AdminScansioni() {
+  const navigate = useNavigate();
   const [data, setData] = useState(() => {
     const today = new Date();
     return today.toISOString().split('T')[0];
@@ -31,12 +33,19 @@ export default function AdminScansioni() {
 
   return (
     <div>
-      <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
-        <div>
-          <h1 className="admin-page-title">REGISTRO SCANSIONI</h1>
-          <p className="admin-page-subtitle">
-            Storico check-in per giornata — {totale} scansion{totale === 1 ? 'e' : 'i'}
-          </p>
+      <div className="admin-page-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+        <button className="back-btn" onClick={() => navigate(-1)} aria-label="Torna indietro">
+          <ArrowLeft size={28} />
+        </button>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
+            <div>
+              <h1 className="admin-page-title">REGISTRO SCANSIONI</h1>
+              <p className="admin-page-subtitle">
+                Storico check-in per giornata — {totale} scansion{totale === 1 ? 'e' : 'i'}
+              </p>
+            </div>
+          </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Calendar size={18} style={{ color: 'var(--color-gray-500)' }} />

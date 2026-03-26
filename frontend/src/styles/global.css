@@ -700,8 +700,38 @@ img {
 .stat-card-label {
   font-size: 0.85rem;
   color: var(--color-gray-500);
-  text-transform: uppercase;
+  color: var(--color-white);
   letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.data-card-subtitle {
+  font-size: 0.85rem;
+  color: var(--color-gray-500);
+  margin-top: 2px;
+}
+
+.data-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--color-gray-300);
+}
+
+.data-card-footer {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px dashed rgba(255,255,255,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.data-card-actions {
+  display: flex;
+  gap: var(--space-sm);
 }
 
 /* ============================================================
