@@ -198,6 +198,7 @@ router.get('/studenti', authMiddleware, async (req, res) => {
         r.cognome, 
         r.email, 
         r.codice_biglietto as ticket_code, 
+        r.rappresentante_istituto,
         IF(c.id IS NOT NULL, 1, 0) as checkin_effettuato, 
         c.scansionato_at as checkin_timestamp,
         r.created_at,

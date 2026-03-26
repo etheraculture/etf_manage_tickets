@@ -8,6 +8,13 @@ export default function AdminStudenti() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterScuola, setFilterScuola] = useState('tutte');
+  const [filterClasse, setFilterClasse] = useState('tutte');
+  const [filterRappresentante, setFilterRappresentante] = useState('tutti');
+
+  // Reset class filter when school changes
+  useEffect(() => {
+    setFilterClasse('tutte');
+  }, [filterScuola]);
 
   useEffect(() => {
     fetchStudenti();
@@ -24,7 +31,13 @@ export default function AdminStudenti() {
     }
   };
 
-  const scuoleUniche = [...new Set(studenti.map(s => s.scuola_nome))].filter(Boolean);
+  const scuoleUniche = [...new Set(studenti.map(s => s.scuola_nome))].filter(Boolean).sort();
+  
+  const classiDisponibili = [...new Set(
+    studenti
+      .filter(s => filterScuola === 'tutte' || s.scuola_nome === filterScuola)
+      .map(s => s.classe)
+  )].filter(Boolean).sort();
 
   const filtered = studenti.filter(s => {
     const term = searchTerm.toLowerCase();
@@ -33,8 +46,15 @@ export default function AdminStudenti() {
       s.cognome.toLowerCase().includes(term) ||
       s.ticket_code.toLowerCase().includes(term) ||
       s.email.toLowerCase().includes(term);
+    
     const matchScuola = filterScuola === 'tutte' || s.scuola_nome === filterScuola;
-    return matchName && matchScuola;
+    const matchClasse = filterClasse === 'tutte' || s.classe === filterClasse;
+    
+    let matchRappresentante = true;
+    if (filterRappresentante === 'si') matchRappresentante = s.rappresentante_istituto === 1;
+    if (filterRappresentante === 'no') matchRappresentante = s.rappresentante_istituto === 0;
+
+    return matchName && matchScuola && matchClasse && matchRappresentante;
   });
 
   if (loading) {
@@ -48,12 +68,14 @@ export default function AdminStudenti() {
   return (
     <div>
       <div className="admin-page-header">
-        <h1 className="admin-page-title">Iscritti Totali ({studenti.length})</h1>
+        <h1 className="admin-page-title">
+          Iscritti: {studenti.length} {filtered.length !== studenti.length && <span style={{fontSize: '1.2rem', color: 'var(--color-teal-light)'}}>(Filtrati: {filtered.length})</span>}
+        </h1>
         <p className="admin-page-subtitle">Elenco dettagliato di tutte le registrazioni</p>
       </div>
 
       <div className="card" style={{ marginBottom: 'var(--space-xl)' }}>
-        <div className="form-row" style={{ alignItems: 'flex-end', marginBottom: 0 }}>
+        <div className="form-row" style={{ alignItems: 'flex-end', marginBottom: 'var(--space-md)' }}>
           <div className="form-group" style={{ marginBottom: 0 }}>
             <label className="form-label">Cerca (Nome / Ticket / Email)</label>
             <div style={{ position: 'relative' }}>
@@ -79,6 +101,34 @@ export default function AdminStudenti() {
               {scuoleUniche.map(s => (
                 <option key={s} value={s}>{s}</option>
               ))}
+            </select>
+          </div>
+        </div>
+        
+        <div className="form-row" style={{ alignItems: 'flex-end', marginBottom: 0 }}>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label">Filtra per Classe</label>
+            <select
+              className="form-select"
+              value={filterClasse}
+              onChange={(e) => setFilterClasse(e.target.value)}
+            >
+              <option value="tutte">Tutte le classi</option>
+              {classiDisponibili.map(c => (
+                <option key={c} value={c}>Classe {c}</option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label">Rappresentante d'Istituto</label>
+            <select
+              className="form-select"
+              value={filterRappresentante}
+              onChange={(e) => setFilterRappresentante(e.target.value)}
+            >
+              <option value="tutti">Tutti</option>
+              <option value="si">Solo Rappresentanti</option>
+              <option value="no">Escludi Rappresentanti</option>
             </select>
           </div>
         </div>
@@ -123,6 +173,11 @@ export default function AdminStudenti() {
                     <div style={{ fontSize: '0.8rem', color: 'var(--color-gray-500)' }}>
                       {s.email}
                     </div>
+                    {s.rappresentante_istituto === 1 && (
+                      <div style={{ fontSize: '0.75rem', color: 'var(--color-accent-orange)', marginTop: '4px', fontWeight: 600 }}>
+                        ★ Rappresentante d'Istituto
+                      </div>
+                    )}
                   </td>
                   <td>
                     <span style={{ fontFamily: 'monospace', background: 'rgba(255,255,255,0.1)', padding: '4px 8px', borderRadius: '4px' }}>
