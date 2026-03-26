@@ -208,7 +208,7 @@ router.get('/studenti', authMiddleware, async (req, res) => {
       LEFT JOIN checkins c ON r.id = c.registrazione_id
       ORDER BY r.created_at DESC
     `;
-    const [rows] = await db.query(query);
+    const [rows] = await pool.execute(query);
     res.json({ data: rows });
   } catch (error) {
     console.error('Errore get studenti:', error);
