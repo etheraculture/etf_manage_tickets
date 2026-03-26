@@ -1089,6 +1089,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
   .stats-grid {
     grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+  .stat-card {
+    padding: var(--space-md);
+  }
+  .stat-card-value {
+    font-size: 1.5rem;
+  }
+  .stat-card-icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: var(--space-sm);
+  }
+  .stat-card-label {
+    font-size: 0.70rem;
+    letter-spacing: 0;
   }
 
   .mobile-menu-btn {

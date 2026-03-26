@@ -21,11 +21,6 @@ export default function AdminLayout({ children }) {
 
   return (
     <div className="admin-layout">
-      {/* Mobile menu button */}
-      <button className="mobile-menu-btn" onClick={() => setMobileOpen(!mobileOpen)}>
-        {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-      </button>
-
       {/* Sidebar */}
       <aside className={`admin-sidebar ${mobileOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
