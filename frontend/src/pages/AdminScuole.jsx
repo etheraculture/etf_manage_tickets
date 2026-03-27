@@ -106,10 +106,8 @@ export default function AdminScuole() {
 
   return (
     <div>
-      <div className="admin-page-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-        <button className="back-btn" onClick={() => navigate('/admin/dashboard')} aria-label="Torna indietro">
-          <ArrowLeft size={28} />
-        </button>
+      <div className="admin-page-header" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'nowrap' }}>
+        <img src="/logo-ethera.png" alt="Ethera" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
             <div>

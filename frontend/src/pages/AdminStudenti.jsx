@@ -123,11 +123,9 @@ export default function AdminStudenti() {
 
   return (
     <div>
-      <div className="admin-page-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-        <button className="back-btn" onClick={() => navigate('/admin/dashboard')} aria-label="Torna indietro">
-          <ArrowLeft size={28} />
-        </button>
-        <div>
+      <div className="admin-page-header" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'nowrap' }}>
+        <img src="/logo-ethera.png" alt="Ethera" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+        <div style={{ flex: 1 }}>
           <h1 className="admin-page-title">
             Iscritti: {studenti.length} {filtered.length !== studenti.length && <span style={{fontSize: '1.2rem', color: 'var(--color-teal-light)'}}>(Filtrati: {filtered.length})</span>}
           </h1>

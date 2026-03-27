@@ -45,8 +45,9 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <div className="admin-page-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-        <div>
+      <div className="admin-page-header" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'nowrap' }}>
+        <img src="/logo-ethera.png" alt="Ethera" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+        <div style={{ flex: 1 }}>
           <h1 className="admin-page-title">DASHBOARD</h1>
           <p className="admin-page-subtitle">Panoramica iscrizioni e presenze</p>
         </div>

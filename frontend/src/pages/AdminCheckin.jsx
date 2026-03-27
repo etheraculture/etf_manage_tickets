@@ -99,11 +99,9 @@ export default function AdminCheckin() {
 
   return (
     <div>
-      <div className="admin-page-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-        <button className="back-btn" onClick={() => navigate('/admin/dashboard')} aria-label="Torna indietro">
-          <ArrowLeft size={28} />
-        </button>
-        <div>
+      <div className="admin-page-header" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'nowrap' }}>
+        <img src="/logo-ethera.png" alt="Ethera" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+        <div style={{ flex: 1 }}>
           <h1 className="admin-page-title">CHECK-IN</h1>
           <p className="admin-page-subtitle">{mode === 'qr' ? 'Inquadra il QR Code del biglietto' : 'Inserisci il codice a 6 caratteri'}</p>
         </div>
