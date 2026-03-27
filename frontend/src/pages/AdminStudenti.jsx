@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/client';
-import { Search, Loader2, ArrowLeft, X, Edit3, Trash2, Mail, School, GraduationCap, Ticket } from 'lucide-react';
+import { Search, Loader2, ArrowLeft, X, Edit3, Trash2, Mail, School, GraduationCap, Ticket, CheckCircle2, XCircle, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -202,14 +202,16 @@ export default function AdminStudenti() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', marginTop: '4px' }}>
                         {s.classe ? <span style={{ color: 'var(--color-gray-400)' }}>Classe {s.classe}</span> : null}
                         {s.rappresentante_istituto === 1 && (
-                          <span className="clean-badge badge-warning">Rappresentante</span>
+                          <Star size={16} fill="var(--color-warning)" color="var(--color-warning)" title="Rappresentante" />
                         )}
                       </div>
                     </td>
                     <td>
-                      <span className={`clean-badge ${s.checkin_effettuato ? 'badge-success' : 'badge-neutral'}`}>
-                        {s.checkin_effettuato ? 'Presente' : 'Assente'}
-                      </span>
+                      {s.checkin_effettuato ? (
+                        <CheckCircle2 size={24} color="var(--color-success)" strokeWidth={2.5} title="Presente" />
+                      ) : (
+                        <XCircle size={24} color="var(--color-gray-400)" strokeWidth={2.5} title="Assente" />
+                      )}
                     </td>
                     <td style={{ textAlign: 'right' }}>
                       <div className="actions" style={{ justifyContent: 'flex-end' }}>
@@ -237,9 +239,11 @@ export default function AdminStudenti() {
                     <div className="modern-card-subtitle">{s.email}</div>
                   </div>
                   <div>
-                    <span className={`clean-badge ${s.checkin_effettuato ? 'badge-success' : 'badge-neutral'}`}>
-                      {s.checkin_effettuato ? 'Presente' : 'Assente'}
-                    </span>
+                    {s.checkin_effettuato ? (
+                      <CheckCircle2 size={28} color="var(--color-success)" strokeWidth={2} title="Presente" />
+                    ) : (
+                      <XCircle size={28} color="var(--color-gray-400)" strokeWidth={2} title="Assente" />
+                    )}
                   </div>
                 </div>
 
@@ -262,8 +266,9 @@ export default function AdminStudenti() {
                   )}
 
                   {s.rappresentante_istituto === 1 && (
-                    <div className="modern-card-info" style={{ color: 'var(--color-accent-orange)', fontWeight: 600 }}>
-                      <span className="clean-badge badge-warning" style={{ margin: 0 }}>Rappresentante d'Istituto</span>
+                    <div className="modern-card-info" style={{ color: 'var(--color-warning)' }} title="Rappresentante d'Istituto">
+                      <Star size={18} fill="currentColor" />
+                      <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>Rappresentante</span>
                     </div>
                   )}
                 </div>
