@@ -67,8 +67,8 @@ export default function AdminDashboard() {
       </h2>
 
       {stats?.per_scuola?.length > 0 ? (
-        <div className="table-container">
-          <table className="data-table">
+        <div className="clean-table-container">
+          <table className="clean-table">
             <thead>
               <tr>
                 <th style={{ width: 30 }}></th>
@@ -84,17 +84,17 @@ export default function AdminDashboard() {
                 const pct = scuola.totale > 0 ? Math.round((scuola.checkins / scuola.totale) * 100) : 0;
                 return (
                   <Fragment key={scuola.scuola_id}>
-                    <tr className="expandable-row" onClick={() => toggleExpand(scuola.scuola_id)}>
-                      <td>
+                    <tr className="expandable-row" onClick={() => toggleExpand(scuola.scuola_id)} style={{ cursor: 'pointer' }}>
+                      <td data-label="">
                         <span className={`expand-icon ${isOpen ? 'open' : ''}`}>
                           <ChevronRight size={16} />
                         </span>
                       </td>
-                      <td><strong>{scuola.scuola_nome}</strong></td>
-                      <td>{scuola.totale}</td>
-                      <td>{scuola.checkins}</td>
-                      <td>
-                        <span className={`badge ${pct >= 70 ? 'badge-success' : pct >= 40 ? 'badge-warning' : 'badge-error'}`}>
+                      <td data-label="Scuola"><strong style={{ color: 'var(--color-white)' }}>{scuola.scuola_nome}</strong></td>
+                      <td data-label="Iscritti">{scuola.totale}</td>
+                      <td data-label="Check-in">{scuola.checkins}</td>
+                      <td data-label="%">
+                        <span className={`clean-badge ${pct >= 70 ? 'badge-success' : pct >= 40 ? 'badge-warning' : 'badge-error'}`}>
                           {pct}%
                         </span>
                       </td>
@@ -102,13 +102,13 @@ export default function AdminDashboard() {
                     {isOpen && scuola.per_classe.map(cl => {
                       const clPct = cl.totale > 0 ? Math.round((cl.checkins / cl.totale) * 100) : 0;
                       return (
-                        <tr key={`${scuola.scuola_id}-${cl.classe}`} className="sub-row">
-                          <td></td>
-                          <td>Classe {cl.classe}</td>
-                          <td>{cl.totale}</td>
-                          <td>{cl.checkins}</td>
-                          <td>
-                            <span className={`badge ${clPct >= 70 ? 'badge-success' : clPct >= 40 ? 'badge-warning' : 'badge-error'}`}>
+                        <tr key={`${scuola.scuola_id}-${cl.classe}`} className="sub-row" style={{ background: 'rgba(255,255,255,0.01)' }}>
+                          <td data-label=""></td>
+                          <td data-label="Classe"><div style={{ paddingLeft: '24px', color: 'var(--color-gray-400)' }}>Classe {cl.classe}</div></td>
+                          <td data-label="Iscritti">{cl.totale}</td>
+                          <td data-label="Check-in">{cl.checkins}</td>
+                          <td data-label="%">
+                            <span className={`clean-badge ${clPct >= 70 ? 'badge-success' : clPct >= 40 ? 'badge-warning' : 'badge-error'}`}>
                               {clPct}%
                             </span>
                           </td>

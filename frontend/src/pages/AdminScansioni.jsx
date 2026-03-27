@@ -63,8 +63,8 @@ export default function AdminScansioni() {
           <p>Caricamento scansioni...</p>
         </div>
       ) : scansioni.length > 0 ? (
-        <div className="table-container">
-          <table className="data-table">
+        <div className="clean-table-container">
+          <table className="clean-table">
             <thead>
               <tr>
                 <th>Ora</th>
@@ -90,7 +90,7 @@ export default function AdminScansioni() {
                   <td data-label="Scuola">{s.scuola}</td>
                   <td data-label="Classe">{s.classe}</td>
                   <td data-label="Metodo">
-                    <span className={`badge ${s.metodo === 'qr_scan' ? 'badge-teal' : 'badge-warning'}`}>
+                    <span className={`clean-badge ${s.metodo === 'qr_scan' ? 'badge-teal' : 'badge-warning'}`}>
                       {s.metodo === 'qr_scan' ? 'QR Scan' : 'Manuale'}
                     </span>
                   </td>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/client';
-import { Search, Loader2, UserCheck, UserX, School, GraduationCap, Edit3, Trash2, ArrowLeft, X, Mail, Ticket } from 'lucide-react';
+import { Search, Loader2, ArrowLeft, X, Edit3, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -8,20 +8,21 @@ export default function AdminStudenti() {
   const navigate = useNavigate();
   const [studenti, setStudenti] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Filtri
   const [searchTerm, setSearchTerm] = useState('');
   const [filterScuola, setFilterScuola] = useState('tutte');
   const [filterClasse, setFilterClasse] = useState('tutte');
   const [filterRappresentante, setFilterRappresentante] = useState('tutti');
 
+  const [scuole, setScuole] = useState([]);
+
+  // Modali Edit & Delete
   const [editingStudent, setEditingStudent] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
-
-  // Edit form state
   const [form, setForm] = useState({
     nome: '', cognome: '', email: '', classe: '', scuola_id: '', rappresentante_istituto: false
   });
-
-  const [scuole, setScuole] = useState([]);
 
   useEffect(() => {
     setFilterClasse('tutte');
@@ -71,7 +72,6 @@ export default function AdminStudenti() {
 
   function openEdit(student) {
     setEditingStudent(student.id);
-    // Troviamo l'id della scuola dal nome
     const schoolObj = scuole.find(sc => sc.nome === student.scuola_nome);
     setForm({
       nome: student.nome,
@@ -105,7 +105,7 @@ export default function AdminStudenti() {
   async function confirmDelete() {
     try {
       await api.delete(`/admin/studenti/${deleteId}`);
-      toast.success('Studente eliminato definitivamente');
+      toast.success('Studente eliminato');
       setDeleteId(null);
       fetchData();
     } catch (err) {
@@ -131,59 +131,58 @@ export default function AdminStudenti() {
           <h1 className="admin-page-title">
             Iscritti: {studenti.length} {filtered.length !== studenti.length && <span style={{fontSize: '1.2rem', color: 'var(--color-teal-light)'}}>(Filtrati: {filtered.length})</span>}
           </h1>
-          <p className="admin-page-subtitle">Gestione completa delle registrazioni</p>
+          <p className="admin-page-subtitle">Gestione tabellare delle registrazioni</p>
         </div>
       </div>
 
-      <div className="card" style={{ marginBottom: 'var(--space-xl)' }}>
-        <div className="form-row" style={{ alignItems: 'flex-end', marginBottom: 'var(--space-md)' }}>
+      <div className="card" style={{ marginBottom: 'var(--space-xl)', padding: 'var(--space-lg)' }}>
+        <div className="responsive-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-md)' }}>
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Cerca (Nome / Ticket / Email)</label>
+            <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Cerca Testo</label>
             <div style={{ position: 'relative' }}>
-              <Search size={20} style={{ position: 'absolute', left: '14px', top: '14px', color: 'var(--color-gray-500)' }} />
+              <Search size={18} style={{ position: 'absolute', left: '16px', top: '16px', color: 'var(--color-gray-500)' }} />
               <input
                 type="text"
                 className="form-input"
-                style={{ paddingLeft: '44px' }}
-                placeholder="Cerca..."
+                style={{ paddingLeft: '48px', height: '48px' }}
+                placeholder="Nome, email, ticket..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
+
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Filtra per Scuola</label>
+            <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Scuola</label>
             <select
               className="form-select"
+              style={{ height: '48px' }}
               value={filterScuola}
               onChange={(e) => setFilterScuola(e.target.value)}
             >
-              <option value="tutte">Tutte le scuole / Indipendenti</option>
-              {scuoleUniche.map(s => (
-                <option key={s} value={s}>{s}</option>
-              ))}
+              <option value="tutte">Tutte le scuole</option>
+              {scuoleUniche.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
-        </div>
-        
-        <div className="form-row" style={{ alignItems: 'flex-end', marginBottom: 0 }}>
+
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Filtra per Classe</label>
+            <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Classe</label>
             <select
               className="form-select"
+              style={{ height: '48px' }}
               value={filterClasse}
               onChange={(e) => setFilterClasse(e.target.value)}
             >
               <option value="tutte">Tutte le classi</option>
-              {classiDisponibili.map(c => (
-                <option key={c} value={c}>Classe {c}</option>
-              ))}
+              {classiDisponibili.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
+
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Rappresentante d'Istituto</label>
+            <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Ruolo</label>
             <select
               className="form-select"
+              style={{ height: '48px' }}
               value={filterRappresentante}
               onChange={(e) => setFilterRappresentante(e.target.value)}
             >
@@ -195,80 +194,69 @@ export default function AdminStudenti() {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
-        <div className="empty-state">
-           <p>Nessuno studente trovato per i filtri selezionati.</p>
-        </div>
-      ) : (
-        <div className="data-grid">
-          {filtered.map(s => (
-            <div className="data-card" key={s.id}>
-              <div className="data-card-header">
-                <div style={{ overflow: 'hidden' }}>
-                  <h3 className="data-card-title" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.cognome} {s.nome}</h3>
-                  <div className="data-card-subtitle" style={{ display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    <Mail size={12} style={{ flexShrink: 0 }} /> <span style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{s.email}</span>
-                  </div>
-                </div>
-                <div style={{ flexShrink: 0, paddingLeft: 8 }}>
-                  {s.checkin_effettuato ? (
-                    <span className="badge badge-success" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <UserCheck size={12} /> Presente
+      <div className="clean-table-container">
+        {filtered.length === 0 ? (
+          <div className="empty-state" style={{ padding: '60px 0' }}>
+            <p style={{ margin: 0, fontSize: '1.1rem', color: 'var(--color-gray-400)' }}>Nessun risultato trovato.</p>
+          </div>
+        ) : (
+          <table className="clean-table">
+            <thead>
+              <tr>
+                <th>Nominativo Email</th>
+                <th>Ticket</th>
+                <th>Scuola / Classe</th>
+                <th>Stato Check-in</th>
+                <th style={{ width: '80px', textAlign: 'right' }}>Azioni</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(s => (
+                <tr key={s.id}>
+                  <td data-label="Alunno">
+                    <div style={{ fontWeight: 600, color: 'var(--color-white)', fontSize: '1.05rem', lineHeight: 1.2 }}>{s.cognome} {s.nome}</div>
+                    <div style={{ color: 'var(--color-gray-500)', fontSize: '0.85rem', marginTop: '4px' }}>{s.email}</div>
+                  </td>
+                  <td data-label="Ticket">
+                    <span style={{ fontFamily: 'monospace', letterSpacing: '2px', color: 'var(--color-teal-light)', fontWeight: 600 }}>{s.ticket_code}</span>
+                  </td>
+                  <td data-label="Istituto">
+                    <div style={{ color: 'var(--color-gray-200)' }}>{s.scuola_nome || 'Privato'}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', marginTop: '4px' }}>
+                      {s.classe ? <span style={{ color: 'var(--color-gray-400)' }}>Classe {s.classe}</span> : null}
+                      {s.rappresentante_istituto === 1 && (
+                        <span style={{ color: 'var(--color-accent-orange)', fontWeight: 500 }}>Rappresentante</span>
+                      )}
+                    </div>
+                  </td>
+                  <td data-label="Stato">
+                    <span className={`clean-badge ${s.checkin_effettuato ? 'badge-success' : 'badge-neutral'}`}>
+                      {s.checkin_effettuato ? 'Presente' : 'Assente'}
                     </span>
-                  ) : (
-                    <span className="badge" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--color-gray-400)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <UserX size={12} /> Assente
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="data-card-body">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Ticket size={14} color="var(--color-teal-light)" />
-                  <span style={{ fontFamily: 'monospace', fontSize: '1.05rem', fontWeight: 600, letterSpacing: '1px' }}>{s.ticket_code}</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
-                  <School size={14} color="var(--color-gray-500)" />
-                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.scuola_nome || 'Nessuna (Docente/Privato)'}</span>
-                </div>
-                {s.classe && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <GraduationCap size={14} color="var(--color-gray-500)" />
-                    <span>Classe {s.classe}</span>
-                  </div>
-                )}
-                {s.rappresentante_istituto === 1 && (
-                  <div style={{ color: 'var(--color-accent-orange)', fontWeight: 600, fontSize: '0.8rem', marginTop: '4px' }}>
-                    ★ Rappresentante d'Istituto
-                  </div>
-                )}
-              </div>
-
-              <div className="data-card-footer">
-                <span style={{ fontSize: '0.75rem', color: 'var(--color-gray-600)' }}>
-                  {new Date(s.created_at).toLocaleString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric' })}
-                </span>
-                <div className="data-card-actions">
-                  <button className="btn btn-secondary btn-sm" onClick={() => openEdit(s)} title="Modifica">
-                    <Edit3 size={16} />
-                  </button>
-                  <button className="btn btn-sm" style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--color-error)' }} onClick={() => setDeleteId(s.id)} title="Elimina">
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+                  </td>
+                  <td data-label="Azioni" style={{ textAlign: 'right' }}>
+                    <div className="actions" style={{ justifyContent: 'flex-end' }}>
+                      <button className="btn btn-secondary btn-sm icon-btn" onClick={() => openEdit(s)} title="Modifica">
+                        <Edit3 size={16} />
+                      </button>
+                      <button className="btn btn-secondary btn-sm icon-btn destructive" onClick={() => setDeleteId(s.id)} title="Elimina">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
 
       {/* Edit Modal */}
       {editingStudent && (
         <div className="modal-overlay" onClick={() => setEditingStudent(null)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h2 className="modal-title" style={{ margin: 0 }}>Modifica Studente</h2>
+              <h2 className="modal-title" style={{ margin: 0 }}>Modifica Iscrizione</h2>
               <button onClick={() => setEditingStudent(null)} style={{ background: 'none', border: 'none', color: 'var(--color-gray-500)', cursor: 'pointer' }}>
                 <X size={20} />
               </button>
@@ -293,9 +281,9 @@ export default function AdminStudenti() {
 
               <div className="form-row" style={{ marginBottom: 'var(--space-md)' }}>
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">Scuola</label>
-                  <select className="form-select" required value={form.scuola_id} onChange={e => setForm({...form, scuola_id: e.target.value})}>
-                    <option value="">Nessuna / Privato</option>
+                  <label className="form-label">Scuola (opzionale)</label>
+                  <select className="form-select" value={form.scuola_id} onChange={e => setForm({...form, scuola_id: e.target.value})}>
+                    <option value="">-- Seleziona (Privato se omesso) --</option>
                     {scuole.filter(sc => sc.attiva).map(sc => (
                       <option key={sc.id} value={sc.id}>{sc.nome}</option>
                     ))}
@@ -307,32 +295,34 @@ export default function AdminStudenti() {
                 </div>
               </div>
 
-              <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', background: 'var(--color-bg-darker)', borderRadius: 'var(--radius-md)' }}>
                 <input type="checkbox" id="rappr" checked={form.rappresentante_istituto} onChange={e => setForm({...form, rappresentante_istituto: e.target.checked})} style={{ width: 18, height: 18 }} />
-                <label htmlFor="rappr" style={{ cursor: 'pointer', margin: 0, color: 'var(--color-white)' }}>Rappresentante d'Istituto</label>
+                <label htmlFor="rappr" style={{ cursor: 'pointer', margin: 0, color: 'var(--color-white)', fontWeight: 500 }}>Rappresentante d'Istituto</label>
               </div>
 
               <div className="modal-actions" style={{ marginTop: 'var(--space-xl)' }}>
                 <button type="button" className="btn btn-secondary" onClick={() => setEditingStudent(null)}>Annulla</button>
-                <button type="submit" className="btn btn-primary">Salva Modifiche</button>
+                <button type="submit" className="btn btn-primary">Salva Dati</button>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Modal */}
       {deleteId && (
         <div className="modal-overlay" onClick={() => setDeleteId(null)}>
           <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 400, textAlign: 'center' }}>
-            <Trash2 size={48} color="var(--color-error)" style={{ margin: '0 auto 16px auto' }} />
-            <h2 className="modal-title" style={{ marginBottom: 8 }}>Eliminare registrazione?</h2>
-            <p style={{ color: 'var(--color-gray-400)', marginBottom: 24 }}>
-              Questa operazione è irreversibile. Verranno eliminati anche tutti i log di check-in associati a questo studente.
+            <div style={{ width: 64, height: 64, background: 'rgba(239, 68, 68, 0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px auto' }}>
+              <Trash2 size={32} color="var(--color-error)" />
+            </div>
+            <h2 className="modal-title" style={{ marginBottom: 8, fontSize: '1.4rem' }}>Eliminare Record?</h2>
+            <p style={{ color: 'var(--color-gray-400)', marginBottom: 24, fontSize: '0.95rem' }}>
+              L'azione eliminerà il biglietto, il QR e lo log di check-in se presente. Irreversibile.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-              <button className="btn btn-secondary" onClick={() => setDeleteId(null)}>Annulla</button>
-              <button className="btn" style={{ background: 'var(--color-error)', color: 'white' }} onClick={confirmDelete}>Conferma Eliminazione</button>
+              <button className="btn btn-secondary" style={{ flex: 1 }} onClick={() => setDeleteId(null)}>Annulla</button>
+              <button className="btn" style={{ flex: 1, background: 'var(--color-error)', color: 'white', border: 'none' }} onClick={confirmDelete}>Conferma</button>
             </div>
           </div>
         </div>
