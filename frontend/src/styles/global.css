@@ -1304,7 +1304,85 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 0.95rem;
 }
 
+/* ============================================================
+   DUAL-RENDER & MODERN MOBILE CARDS
+   ============================================================ */
+.mobile-only {
+  display: none;
+}
+.desktop-only {
+  display: block;
+}
+
+.modern-card {
+  background: linear-gradient(145deg, var(--color-bg-card), rgba(10, 30, 42, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modern-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.modern-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-white);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.modern-card-subtitle {
+  font-size: 0.85rem;
+  color: var(--color-gray-400);
+}
+
+.modern-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.modern-card-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--color-gray-300);
+}
+
+.modern-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.06);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE
+   ============================================================ */
 @media (max-width: 768px) {
+  .mobile-only {
+    display: block !important;
+  }
+  .desktop-only {
+    display: none !important;
+  }
+
   .admin-main {
     margin-left: 0;
     padding: var(--space-md) var(--space-sm) 100px var(--space-sm) !important;
@@ -1314,146 +1392,55 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .card {
     padding: var(--space-md);
   }
-
-  /* Hyper-Responsive Clean Table to List */
-  .clean-table, .clean-table tbody, .clean-table tr, .clean-table td {
-    display: block;
-    width: 100%;
-  }
   
-  .clean-table thead {
-    display: none !important;
-  }
-  
-  .clean-table-container {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-  }
-  
-  .clean-table tbody tr {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 24px;
-    background: linear-gradient(to bottom right, #0F293E, #0A1E2A);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-  }
-
-  .clean-table tbody tr.sub-row {
-    margin-top: -16px;
-    margin-bottom: 24px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px dashed rgba(255, 255, 255, 0.04);
-    border-top: none;
-    border-radius: 0 0 16px 16px;
-    padding: 16px;
-    box-shadow: inset 0 4px 10px rgba(0,0,0,0.1);
-  }
-  
-  .clean-table td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 0 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    text-align: right;
-  }
-  
-  .clean-table td:last-child {
-    border-bottom: none !important;
-    padding-bottom: 0 !important;
-  }
-
-  /* Nascondi td vuoti e icone espansione su mobile se non servono (o centrali) */
-  .clean-table td[data-label=""] {
-    display: none !important;
-  }
-  
-  /* Usa data-label per mostrare l'etichetta sinistra */
-  .clean-table td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: #94A3B8;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.5px;
-    margin-right: 16px;
-    flex-shrink: 0;
-  }
-
-  /* Modifica allineamento per le azioni e campi a destra per adattarli con l'etichetta */
-  .clean-table td > div, .clean-table td > strong, .clean-table td > span {
-    text-align: right;
-    max-width: 65%;
-    word-break: break-word;
-  }
-
-  .clean-table td[data-label="Azioni"] {
-    margin-top: 8px;
-    padding-top: 16px !important;
-    border-top: 1px dashed rgba(255, 255, 255, 0.1);
-    justify-content: space-between;
-  }
-  
-  .clean-table td[data-label="Azioni"]::before {
-    content: "";
-  }
-
-  .clean-table td[data-label="Azioni"] > div {
-    width: 100%;
-    justify-content: flex-end;
-  }
-  
-  .desktop-only-link {
-    display: none !important;
-  }
   .mobile-bottom-nav {
     display: flex;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 70px;
-    background: rgba(6, 21, 32, 0.98);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    height: 80px;
+    background: rgba(14, 30, 46, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-top: 1px solid var(--color-border);
-    justify-content: space-around;
-    align-items: center;
     z-index: 1000;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    justify-content: space-around;
+    padding-bottom: env(safe-area-inset-bottom);
   }
-  .mobile-nav-item {
+
+  .nav-item-mobile {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    color: var(--color-gray-500);
     text-decoration: none;
+    color: var(--color-gray-400);
+    gap: 4px;
     font-size: 0.70rem;
     font-weight: 500;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: var(--font-body);
-    width: 60px;
+    transition: all 0.2s;
   }
+
+  .nav-item-mobile.active {
+    color: var(--color-teal);
+  }
+
   .mobile-nav-item.active {
     color: var(--color-teal-light);
   }
+
   .mobile-nav-item.text-error {
     color: var(--color-error);
   }
+
   .mobile-nav-fab-container {
     position: relative;
     top: -24px;
     z-index: 1001;
   }
+
   .mobile-nav-fab {
     display: flex;
     align-items: center;
@@ -1468,6 +1455,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     text-decoration: none;
     transition: transform var(--transition-fast);
   }
+
   .mobile-nav-fab:active {
     transform: scale(0.92);
   }

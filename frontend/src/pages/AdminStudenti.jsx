@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/client';
-import { Search, Loader2, ArrowLeft, X, Edit3, Trash2 } from 'lucide-react';
+import { Search, Loader2, ArrowLeft, X, Edit3, Trash2, Mail, School, GraduationCap, Ticket } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -17,7 +17,7 @@ export default function AdminStudenti() {
 
   const [scuole, setScuole] = useState([]);
 
-  // Modali Edit & Delete
+  // Modali
   const [editingStudent, setEditingStudent] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [form, setForm] = useState({
@@ -131,7 +131,7 @@ export default function AdminStudenti() {
           <h1 className="admin-page-title">
             Iscritti: {studenti.length} {filtered.length !== studenti.length && <span style={{fontSize: '1.2rem', color: 'var(--color-teal-light)'}}>(Filtrati: {filtered.length})</span>}
           </h1>
-          <p className="admin-page-subtitle">Gestione tabellare delle registrazioni</p>
+          <p className="admin-page-subtitle">Gestione registrazioni con Dual-Render Layout</p>
         </div>
       </div>
 
@@ -141,51 +141,26 @@ export default function AdminStudenti() {
             <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Cerca Testo</label>
             <div style={{ position: 'relative' }}>
               <Search size={18} style={{ position: 'absolute', left: '16px', top: '16px', color: 'var(--color-gray-500)' }} />
-              <input
-                type="text"
-                className="form-input"
-                style={{ paddingLeft: '48px', height: '48px' }}
-                placeholder="Nome, email, ticket..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+              <input type="text" className="form-input" style={{ paddingLeft: '48px', height: '48px' }} placeholder="Nome, email, ticket..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             </div>
           </div>
-
           <div className="form-group" style={{ marginBottom: 0 }}>
             <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Scuola</label>
-            <select
-              className="form-select"
-              style={{ height: '48px' }}
-              value={filterScuola}
-              onChange={(e) => setFilterScuola(e.target.value)}
-            >
+            <select className="form-select" style={{ height: '48px' }} value={filterScuola} onChange={(e) => setFilterScuola(e.target.value)}>
               <option value="tutte">Tutte le scuole</option>
               {scuoleUniche.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
-
           <div className="form-group" style={{ marginBottom: 0 }}>
             <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Classe</label>
-            <select
-              className="form-select"
-              style={{ height: '48px' }}
-              value={filterClasse}
-              onChange={(e) => setFilterClasse(e.target.value)}
-            >
+            <select className="form-select" style={{ height: '48px' }} value={filterClasse} onChange={(e) => setFilterClasse(e.target.value)}>
               <option value="tutte">Tutte le classi</option>
               {classiDisponibili.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
-
           <div className="form-group" style={{ marginBottom: 0 }}>
             <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Ruolo</label>
-            <select
-              className="form-select"
-              style={{ height: '48px' }}
-              value={filterRappresentante}
-              onChange={(e) => setFilterRappresentante(e.target.value)}
-            >
+            <select className="form-select" style={{ height: '48px' }} value={filterRappresentante} onChange={(e) => setFilterRappresentante(e.target.value)}>
               <option value="tutti">Tutti</option>
               <option value="si">Solo Rappresentanti</option>
               <option value="no">Escludi Rappresentanti</option>
@@ -194,62 +169,118 @@ export default function AdminStudenti() {
         </div>
       </div>
 
-      <div className="clean-table-container">
-        {filtered.length === 0 ? (
-          <div className="empty-state" style={{ padding: '60px 0' }}>
-            <p style={{ margin: 0, fontSize: '1.1rem', color: 'var(--color-gray-400)' }}>Nessun risultato trovato.</p>
+      {filtered.length === 0 ? (
+        <div className="empty-state" style={{ padding: '60px 0' }}>
+          <p style={{ margin: 0, fontSize: '1.1rem', color: 'var(--color-gray-400)' }}>Nessun risultato trovato.</p>
+        </div>
+      ) : (
+        <>
+          {/* DESKTOP VIEW: CLEAN TABLE */}
+          <div className="desktop-only clean-table-container">
+            <table className="clean-table">
+              <thead>
+                <tr>
+                  <th>Nominativo Email</th>
+                  <th>Ticket</th>
+                  <th>Scuola / Classe</th>
+                  <th>Stato Check-in</th>
+                  <th style={{ width: '80px', textAlign: 'right' }}>Azioni</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map(s => (
+                  <tr key={s.id}>
+                    <td>
+                      <div style={{ fontWeight: 600, color: 'var(--color-white)', fontSize: '1.05rem', lineHeight: 1.2 }}>{s.cognome} {s.nome}</div>
+                      <div style={{ color: 'var(--color-gray-400)', fontSize: '0.85rem', marginTop: '4px' }}>{s.email}</div>
+                    </td>
+                    <td>
+                      <span style={{ fontFamily: 'monospace', letterSpacing: '2px', color: 'var(--color-teal-light)', fontWeight: 600 }}>{s.ticket_code}</span>
+                    </td>
+                    <td>
+                      <div style={{ color: 'var(--color-gray-200)' }}>{s.scuola_nome || 'Privato'}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', marginTop: '4px' }}>
+                        {s.classe ? <span style={{ color: 'var(--color-gray-400)' }}>Classe {s.classe}</span> : null}
+                        {s.rappresentante_istituto === 1 && (
+                          <span className="clean-badge badge-warning">Rappresentante</span>
+                        )}
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`clean-badge ${s.checkin_effettuato ? 'badge-success' : 'badge-neutral'}`}>
+                        {s.checkin_effettuato ? 'Presente' : 'Assente'}
+                      </span>
+                    </td>
+                    <td style={{ textAlign: 'right' }}>
+                      <div className="actions" style={{ justifyContent: 'flex-end' }}>
+                        <button className="btn btn-secondary btn-sm icon-btn" onClick={() => openEdit(s)} title="Modifica">
+                          <Edit3 size={16} />
+                        </button>
+                        <button className="btn btn-secondary btn-sm icon-btn destructive" onClick={() => setDeleteId(s.id)} title="Elimina">
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        ) : (
-          <table className="clean-table">
-            <thead>
-              <tr>
-                <th>Nominativo Email</th>
-                <th>Ticket</th>
-                <th>Scuola / Classe</th>
-                <th>Stato Check-in</th>
-                <th style={{ width: '80px', textAlign: 'right' }}>Azioni</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map(s => (
-                <tr key={s.id}>
-                  <td data-label="Alunno">
-                    <div style={{ fontWeight: 600, color: 'var(--color-white)', fontSize: '1.05rem', lineHeight: 1.2 }}>{s.cognome} {s.nome}</div>
-                    <div style={{ color: 'var(--color-gray-500)', fontSize: '0.85rem', marginTop: '4px' }}>{s.email}</div>
-                  </td>
-                  <td data-label="Ticket">
-                    <span style={{ fontFamily: 'monospace', letterSpacing: '2px', color: 'var(--color-teal-light)', fontWeight: 600 }}>{s.ticket_code}</span>
-                  </td>
-                  <td data-label="Istituto">
-                    <div style={{ color: 'var(--color-gray-200)' }}>{s.scuola_nome || 'Privato'}</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', marginTop: '4px' }}>
-                      {s.classe ? <span style={{ color: 'var(--color-gray-400)' }}>Classe {s.classe}</span> : null}
-                      {s.rappresentante_istituto === 1 && (
-                        <span style={{ color: 'var(--color-accent-orange)', fontWeight: 500 }}>Rappresentante</span>
-                      )}
-                    </div>
-                  </td>
-                  <td data-label="Stato">
+
+          {/* MOBILE VIEW: MODERN CARDS */}
+          <div className="mobile-only">
+            {filtered.map(s => (
+              <div key={s.id} className="modern-card">
+                <div className="modern-card-header">
+                  <div>
+                    <h4 className="modern-card-title">{s.cognome} {s.nome}</h4>
+                    <div className="modern-card-subtitle">{s.email}</div>
+                  </div>
+                  <div>
                     <span className={`clean-badge ${s.checkin_effettuato ? 'badge-success' : 'badge-neutral'}`}>
                       {s.checkin_effettuato ? 'Presente' : 'Assente'}
                     </span>
-                  </td>
-                  <td data-label="Azioni" style={{ textAlign: 'right' }}>
-                    <div className="actions" style={{ justifyContent: 'flex-end' }}>
-                      <button className="btn btn-secondary btn-sm icon-btn" onClick={() => openEdit(s)} title="Modifica">
-                        <Edit3 size={16} />
-                      </button>
-                      <button className="btn btn-secondary btn-sm icon-btn destructive" onClick={() => setDeleteId(s.id)} title="Elimina">
-                        <Trash2 size={16} />
-                      </button>
+                  </div>
+                </div>
+
+                <div className="modern-card-body">
+                  <div className="modern-card-info">
+                    <Ticket size={16} color="var(--color-teal)" />
+                    <strong style={{ fontFamily: 'monospace', fontSize: '1rem', letterSpacing: '2px', color: 'var(--color-teal-light)' }}>{s.ticket_code}</strong>
+                  </div>
+                  
+                  <div className="modern-card-info">
+                    <School size={16} color="var(--color-gray-400)" />
+                    <span>{s.scuola_nome || 'Privato'}</span>
+                  </div>
+
+                  {s.classe && (
+                    <div className="modern-card-info">
+                      <GraduationCap size={16} color="var(--color-gray-400)" />
+                      <span>Classe {s.classe}</span>
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+                  )}
+
+                  {s.rappresentante_istituto === 1 && (
+                    <div className="modern-card-info" style={{ color: 'var(--color-accent-orange)', fontWeight: 600 }}>
+                      <span className="clean-badge badge-warning" style={{ margin: 0 }}>Rappresentante d'Istituto</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="modern-card-actions">
+                  <button className="icon-btn" style={{ flex: 1, height: '44px', borderRadius: '12px' }} onClick={() => openEdit(s)}>
+                    <Edit3 size={18} /> <span style={{ marginLeft: 8, fontSize: '0.9rem', fontWeight: 600 }}>Modifica</span>
+                  </button>
+                  <button className="icon-btn destructive" style={{ flex: 1, height: '44px', borderRadius: '12px' }} onClick={() => setDeleteId(s.id)}>
+                    <Trash2 size={18} /> <span style={{ marginLeft: 8, fontSize: '0.9rem', fontWeight: 600 }}>Elimina</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       {/* Edit Modal */}
       {editingStudent && (
