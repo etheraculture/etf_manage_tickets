@@ -8,6 +8,7 @@ import AdminCheckin from './pages/AdminCheckin';
 import AdminScansioni from './pages/AdminScansioni';
 import AdminStudenti from './pages/AdminStudenti';
 import AdminLayout from './components/AdminLayout';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem('ethera_admin_token');
@@ -28,6 +29,7 @@ export default function App() {
       <Route path="/eft_2026" element={<RegistrationForm />} />
       <Route path="/" element={<Navigate to="/eft_2026" replace />} />
       <Route path="/success" element={<RegistrationSuccess />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
 
       {/* Admin login */}
       <Route path="/admin" element={<AdminRoute />} />

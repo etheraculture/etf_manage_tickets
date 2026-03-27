@@ -19,6 +19,7 @@ export default function RegistrationForm() {
     scuola_id: '',
     classe: '',
     rappresentante_istituto: false,
+    privacy_accepted: false,
   });
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function RegistrationForm() {
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Email non valida';
     if (!form.scuola_id) e.scuola_id = 'Seleziona una scuola';
     if (!form.classe.trim()) e.classe = 'Classe richiesta';
+    if (!form.privacy_accepted) e.privacy_accepted = 'Devi accettare l\'informativa privacy';
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -220,6 +222,21 @@ export default function RegistrationForm() {
                   <span>Sono Rappresentante di Istituto</span>
                 </label>
               </div>
+
+              <div className="form-group">
+                <label className="form-checkbox-wrapper" style={{ alignItems: 'flex-start' }}>
+                  <input
+                    type="checkbox"
+                    checked={form.privacy_accepted}
+                    onChange={e => handleChange('privacy_accepted', e.target.checked)}
+                    style={{ marginTop: '4px' }}
+                  />
+                  <span style={{ fontSize: '0.82rem', lineHeight: 1.5, color: '#475569' }}>
+                    Ho letto l'<a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-teal-light)', textDecoration: 'underline' }}>Informativa Privacy</a> e accetto il trattamento dei miei dati per l'iscrizione all'evento. Se ho meno di 14 anni, un genitore o tutore ha autorizzato questa iscrizione.
+                  </span>
+                </label>
+                {errors.privacy_accepted && <span className="form-error-text">{errors.privacy_accepted}</span>}
+              </div>
             </div>
 
             <button type="submit" className="btn btn-primary btn-lg btn-full" disabled={loading}>
@@ -237,6 +254,12 @@ export default function RegistrationForm() {
             </button>
           </div>
         </form>
+
+        <div style={{ textAlign: 'center', marginTop: '24px', paddingBottom: '16px' }}>
+          <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#64748b', fontSize: '0.82rem', textDecoration: 'underline' }}>
+            Informativa sulla Privacy (GDPR)
+          </a>
+        </div>
       </div>
     </div>
   );
