@@ -37,8 +37,19 @@ router.post(
     body('eta').isInt({ min: 13, max: 99 }).withMessage('Età: 13-99'),
     body('citta').trim().isLength({ min: 2, max: 100 }).withMessage('Città non valida'),
     body('email').trim().toLowerCase().isEmail().withMessage('Email non valida'),
-    body('scuola_id').isInt({ min: 1 }).withMessage('Scuola non selezionata'),
-    body('classe').trim().isLength({ min: 1, max: 20 }).withMessage('Classe non valida'),
+    body('isStudente').isBoolean().withMessage('Specifica se sei studente'),
+    body('scuola_id').custom((value, { req }) => {
+      if (req.body.isStudente === true && (!value || isNaN(value) || value < 1)) {
+        throw new Error('Scuola non selezionata');
+      }
+      return true;
+    }),
+    body('classe').custom((value, { req }) => {
+      if (req.body.isStudente === true && (!value || value.trim().length === 0)) {
+        throw new Error('Classe non valida');
+      }
+      return true;
+    }),
     body('rappresentante_istituto').optional().isBoolean(),
   ],
   async (req, res) => {
@@ -49,15 +60,23 @@ router.post(
     }
 
     try {
-      const { nome, cognome, eta, citta, email, scuola_id, classe, rappresentante_istituto } = req.body;
+      const { nome, cognome, eta, citta, email, isStudente, scuola_id, classe, rappresentante_istituto } = req.body;
 
-      // Verifica che la scuola esista e sia attiva
-      const [scuole] = await pool.execute(
-        'SELECT id FROM scuole WHERE id = ? AND attiva = TRUE',
-        [scuola_id]
-      );
-      if (scuole.length === 0) {
-        return res.status(400).json({ error: 'Scuola non valida o non attiva' });
+      let finalScuola = null;
+      let finalClasse = null;
+
+      if (isStudente) {
+        finalScuola = parseInt(scuola_id, 10);
+        finalClasse = classe.trim().toUpperCase();
+
+        // Verifica che la scuola esista e sia attiva solo se studente
+        const [scuole] = await pool.execute(
+          'SELECT id FROM scuole WHERE id = ? AND attiva = TRUE',
+          [finalScuola]
+        );
+        if (scuole.length === 0) {
+          return res.status(400).json({ error: 'Scuola non valida o non attiva' });
+        }
       }
 
       // Genera codice univoco
@@ -77,9 +96,9 @@ router.post(
           cognome.trim(),
           parseInt(eta, 10),
           citta.trim(),
-          scuola_id,
-          classe.trim().toUpperCase(),
-          rappresentante_istituto ? 1 : 0,
+          finalScuola,
+          finalClasse,
+          (isStudente && rappresentante_istituto) ? 1 : 0,
           email,
           qrCodeBase64,
         ]

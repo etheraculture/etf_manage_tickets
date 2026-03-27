@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircle, ArrowLeft } from 'lucide-react';
+import { CheckCircle, ArrowLeft, Mail, Calendar, MapPin } from 'lucide-react';
 import styles from './RegistrationForm.module.css';
 
 export default function RegistrationSuccess() {
@@ -36,95 +36,109 @@ export default function RegistrationSuccess() {
       
       {/* Navbar overlay */}
       <div className={styles.navbar}>
-        <div style={{ color: '#fff', fontSize: '0.8rem', letterSpacing: '0.1em', fontWeight: 600 }}>ETHERA CULTURE</div>
-        <img src="/logo-eft.png" alt="EFT Logo" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <img src="/logo-eft.png" alt="EFT Logo" style={{ height: '32px', filter: 'brightness(0) invert(1)' }} />
+          <div style={{ color: '#fff', fontSize: '0.9rem', letterSpacing: '0.1em', fontWeight: 600 }}>ETHERA FUTURE TALKS</div>
+        </div>
       </div>
 
       {/* Hero Section */}
-      <div className={styles.heroSection} style={{ minHeight: '35vh', paddingBottom: '40px' }}>
+      <div className={styles.heroSection} style={{ minHeight: '40vh', paddingBottom: '40px' }}>
         <div className={styles.heroVectors}></div>
-        <div className={styles.heroPreTitle}>SUCCESS!</div>
-        <h1 className={styles.heroTitle} style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}>
-          ISCRIZIONE<br />
-          CONFERMATA
-        </h1>
-        <div className={styles.heroSubtitle}>
-          CIAO <span>{nome?.toUpperCase() || 'PARTECIPANTE'}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', zIndex: 2 }}>
+          <div style={{ background: 'rgba(46, 204, 113, 0.2)', padding: '12px', borderRadius: '50%' }}>
+            <CheckCircle size={32} color="#2ECC71" />
+          </div>
+          <div className={styles.heroPreTitle} style={{ margin: 0, color: '#2ECC71' }}>ISCRIZIONE CONFERMATA</div>
         </div>
+        <h1 className={styles.heroTitle} style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}>
+          CI VEDIAMO<br />
+          PRESTO, {nome?.toUpperCase() || 'PARTECIPANTE'}.
+        </h1>
       </div>
 
       {/* Body Section */}
       <div className={styles.formBody}>
         <div className={styles.formContainer} style={{ maxWidth: '600px', textAlign: 'center' }}>
           
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-            <CheckCircle size={64} color="#f97316" />
-          </div>
-
-          <p className={styles.formMainSubHeading} style={{ margin: '0 auto 32px', borderLeft: 'none', textAlign: 'center' }}>
-            Abbiamo inviato una mail di conferma con il tuo biglietto a <strong>{email}</strong>
+          <p className={styles.formMainSubHeading} style={{ margin: '0 auto 40px', borderLeft: 'none', textAlign: 'center', fontSize: '1.2rem' }}>
+            Abbiamo inviato una mail ufficiale con il tuo biglietto a <strong style={{ color: '#0f172a' }}>{email}</strong>
           </p>
 
-          {/* Ticket Layout */}
+          {/* Ticket Layout Premium */}
           <div style={{ 
-            background: '#f8fafc',
+            background: '#ffffff',
             border: '2px solid #e2e8f0',
             borderRadius: '24px',
-            padding: '40px 24px',
             position: 'relative',
             overflow: 'hidden',
-            marginBottom: '40px'
+            marginBottom: '40px',
+            boxShadow: '0 20px 40px rgba(15, 23, 42, 0.05)'
           }}>
-            <div style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: '0.85rem',
-              fontWeight: 700,
-              color: '#94a3b8',
-              letterSpacing: '0.1em',
-              marginBottom: '8px'
-            }}>CODICE ACCESSO</div>
-            
-            <div style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: '2.5rem',
-              fontWeight: 800,
-              color: '#0f172a',
-              letterSpacing: '0.05em',
-              marginBottom: '32px'
-            }}>{codice}</div>
-
-            <div style={{
-              background: '#fff',
-              padding: '16px',
-              borderRadius: '16px',
-              display: 'inline-block',
-              border: '1px solid #e2e8f0',
-              boxShadow: '0 10px 25px rgba(0,0,0,0.05)'
-            }}>
-              <img src={qr} alt="QR Code Biglietto" style={{ width: '200px', height: '200px', display: 'block' }} />
+            {/* Ticket Header */}
+            <div style={{ background: '#f8fafc', padding: '24px', borderBottom: '2px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', letterSpacing: '0.1em', marginBottom: '4px' }}>EVENTO</div>
+                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0f172a', fontFamily: "'Space Grotesk', sans-serif" }}>EFT 2026</div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', letterSpacing: '0.1em', marginBottom: '4px' }}>CODICE</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', fontFamily: "'Space Grotesk', sans-serif" }}>{codice}</div>
+              </div>
             </div>
 
-            <div style={{
-              marginTop: '24px',
-              color: '#0f172a',
-              fontSize: '0.9rem',
-              fontWeight: 600
-            }}>
-              ⚡ Presenta questo QR code all'ingresso
+            {/* Ticket Body */}
+            <div style={{ padding: '40px 24px' }}>
+              <div style={{
+                background: '#fff',
+                padding: '16px',
+                borderRadius: '16px',
+                display: 'inline-block',
+                border: '2px solid #f1f5f9',
+                boxShadow: '0 10px 25px rgba(0,0,0,0.02)'
+              }}>
+                <img src={qr} alt="QR Code Biglietto" style={{ width: '220px', height: '220px', display: 'block' }} />
+              </div>
+
+              <div style={{
+                marginTop: '32px',
+                display: 'flex',
+                background: '#f8fafc',
+                borderRadius: '12px',
+                padding: '16px'
+              }}>
+                <div style={{ flex: 1, textAlign: 'center', borderRight: '1px solid #e2e8f0' }}>
+                  <Calendar size={20} color="#f97316" style={{ margin: '0 auto 8px' }} />
+                  <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>DATA</div>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0f172a' }}>8-10 APR</div>
+                </div>
+                <div style={{ flex: 1, textAlign: 'center' }}>
+                  <MapPin size={20} color="#f97316" style={{ margin: '0 auto 8px' }} />
+                  <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>LUOGO</div>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0f172a' }}>MOLFETTA</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Ticket Footer */}
+            <div style={{ background: 'linear-gradient(135deg, #f97316, #fb923c)', padding: '16px', color: '#fff' }}>
+              <div style={{ fontSize: '0.95rem', fontWeight: 600, fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '0.05em' }}>
+                ⚡ MOSTRA QUESTO QR ALL'INGRESSO
+              </div>
             </div>
           </div>
 
           <button 
             className={styles.submitBtn} 
             style={{ 
-              background: '#f8fafc', 
+              background: '#ffffff', 
               color: '#0f172a', 
               border: '2px solid #e2e8f0',
               boxShadow: 'none'
             }} 
             onClick={() => navigate('/')}
           >
-            <ArrowLeft size={20} /> Nuova Registrazione
+            <ArrowLeft size={20} /> Torna alla Home
           </button>
 
         </div>

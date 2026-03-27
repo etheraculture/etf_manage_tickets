@@ -16,6 +16,7 @@ export default function RegistrationForm() {
     eta: '',
     citta: '',
     email: '',
+    isStudente: true,
     scuola_id: '',
     classe: '',
     rappresentante_istituto: false,
@@ -23,7 +24,6 @@ export default function RegistrationForm() {
   });
 
   useEffect(() => {
-    // Override del background sul body solo per questa pagina (se necessario)
     document.body.style.backgroundColor = '#ffffff';
     api.get('/scuole')
       .then(res => setSchools(res.data.data || []))
@@ -42,8 +42,12 @@ export default function RegistrationForm() {
     if (!form.eta || isNaN(eta) || eta < 13 || eta > 99) e.eta = 'Età non valida (13-99)';
     if (!form.citta.trim()) e.citta = 'Città richiesta';
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Email non valida';
-    if (!form.scuola_id) e.scuola_id = 'Seleziona una scuola';
-    if (!form.classe.trim()) e.classe = 'Classe richiesta';
+    
+    if (form.isStudente) {
+      if (!form.scuola_id) e.scuola_id = 'Seleziona una scuola';
+      if (!form.classe.trim()) e.classe = 'Classe richiesta';
+    }
+
     if (!form.privacy_accepted) e.privacy_accepted = 'Devi accettare l\'informativa privacy';
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -58,8 +62,9 @@ export default function RegistrationForm() {
       const payload = {
         ...form,
         eta: parseInt(form.eta),
-        scuola_id: parseInt(form.scuola_id),
-        classe: form.classe.trim().toUpperCase(),
+        isStudente: form.isStudente,
+        scuola_id: form.isStudente ? parseInt(form.scuola_id) : null,
+        classe: form.isStudente ? form.classe.trim().toUpperCase() : null,
       };
 
       const res = await api.post('/registrazione', payload);
@@ -94,15 +99,16 @@ export default function RegistrationForm() {
       
       {/* Navbar overlay in alto */}
       <div className={styles.navbar}>
-        <div style={{ color: '#fff', fontSize: '0.8rem', letterSpacing: '0.1em', fontWeight: 600 }}>ETHERA CULTURE</div>
-        <img src="/logo-eft.png" alt="EFT Logo" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <img src="/logo-eft.png" alt="EFT Logo" style={{ height: '32px', filter: 'brightness(0) invert(1)' }} />
+          <div style={{ color: '#fff', fontSize: '0.9rem', letterSpacing: '0.1em', fontWeight: 600 }}>ETHERA CULTURE</div>
+        </div>
       </div>
 
       {/* Hero Section (Dark Theme) */}
       <div className={styles.heroSection}>
         <div className={styles.heroVectors}></div>
-        <div className={styles.heroPreTitle}>FOR YOUTH 17–25</div>
-        <h1 className={styles.heroTitle}>
+        <h1 className={styles.heroTitle} style={{ marginTop: 'auto' }}>
           ETHERA<br />
           FUTURE TALKS
         </h1>
@@ -198,51 +204,76 @@ export default function RegistrationForm() {
 
             <div className={styles.formSectionTitle}>
               <span className={styles.formSectionBadge}>STEP 02</span>
-              Dati Scolastici
+              Qualifica
             </div>
 
-            <div className={styles.formGridRow}>
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Scuola</label>
-                <select
-                  className={`${styles.formSelect} ${errors.scuola_id ? styles.formSelectError : ''}`}
-                  value={form.scuola_id}
-                  onChange={e => handleChange('scuola_id', e.target.value)}
-                >
-                  <option value="">-- Seleziona il tuo o un altro istituto --</option>
-                  {schools.map(s => (
-                    <option key={s.id} value={s.id}>{s.nome} - {s.citta}</option>
-                  ))}
-                </select>
-                {errors.scuola_id && <span className={styles.errorText}>{errors.scuola_id}</span>}
-              </div>
-
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Classe</label>
-                <input
-                  type="text"
-                  className={`${styles.formInput} ${errors.classe ? styles.formInputError : ''}`}
-                  placeholder="Es: 4A"
-                  value={form.classe}
-                  onChange={e => handleChange('classe', e.target.value)}
-                  maxLength={20}
-                />
-                {errors.classe && <span className={styles.errorText}>{errors.classe}</span>}
-              </div>
-            </div>
-
-            <label className={styles.checkboxWrapper}>
+            <label className={styles.checkboxWrapper} style={{ marginBottom: form.isStudente ? '24px' : '40px' }}>
               <input
                 type="checkbox"
                 className={styles.checkboxInput}
-                checked={form.rappresentante_istituto}
-                onChange={e => handleChange('rappresentante_istituto', e.target.checked)}
+                checked={form.isStudente}
+                onChange={e => handleChange('isStudente', e.target.checked)}
               />
-              <span className={styles.checkboxLabel}>Sono Rappresentante di Istituto</span>
+              <span className={styles.checkboxLabel}>
+                <strong>Sono attualmente uno studente di scuola superiore</strong>
+                <br /><small>Seleziona questa casella per inserire i dati del tuo istituto.</small>
+              </span>
             </label>
 
-            <div style={{ marginTop: '24px' }}>
-              <label className={styles.checkboxWrapper}>
+            {form.isStudente && (
+              <div style={{ padding: '24px', background: '#f8fafc', borderRadius: '16px', border: '1px solid #e2e8f0', marginBottom: '40px' }}>
+                <div className={styles.formGridRow}>
+                  <div className={styles.formGroup} style={{ marginBottom: '16px' }}>
+                    <label className={styles.formLabel}>Scuola</label>
+                    <select
+                      className={`${styles.formSelect} ${errors.scuola_id ? styles.formSelectError : ''}`}
+                      style={{ background: '#ffffff' }}
+                      value={form.scuola_id}
+                      onChange={e => handleChange('scuola_id', e.target.value)}
+                    >
+                      <option value="">-- Seleziona il tuo o un altro istituto --</option>
+                      {schools.map(s => (
+                        <option key={s.id} value={s.id}>{s.nome} - {s.citta}</option>
+                      ))}
+                    </select>
+                    {errors.scuola_id && <span className={styles.errorText}>{errors.scuola_id}</span>}
+                  </div>
+
+                  <div className={styles.formGroup} style={{ marginBottom: '16px' }}>
+                    <label className={styles.formLabel}>Classe</label>
+                    <input
+                      type="text"
+                      className={`${styles.formInput} ${errors.classe ? styles.formInputError : ''}`}
+                      style={{ background: '#ffffff' }}
+                      placeholder="Es: 4A"
+                      value={form.classe}
+                      onChange={e => handleChange('classe', e.target.value)}
+                      maxLength={20}
+                    />
+                    {errors.classe && <span className={styles.errorText}>{errors.classe}</span>}
+                  </div>
+                </div>
+
+                <label className={styles.checkboxWrapper} style={{ marginTop: 0, background: '#ffffff' }}>
+                  <input
+                    type="checkbox"
+                    className={styles.checkboxInput}
+                    checked={form.rappresentante_istituto}
+                    onChange={e => handleChange('rappresentante_istituto', e.target.checked)}
+                  />
+                  <span className={styles.checkboxLabel}>Sono Rappresentante di Istituto</span>
+                </label>
+              </div>
+            )}
+
+            <div>
+              <label 
+                className={styles.checkboxWrapper} 
+                style={{ 
+                  borderColor: errors.privacy_accepted ? '#ef4444' : '#e2e8f0', 
+                  background: errors.privacy_accepted ? '#fef2f2' : '#f8fafc' 
+                }}
+              >
                 <input
                   type="checkbox"
                   className={styles.checkboxInput}
