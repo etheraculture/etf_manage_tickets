@@ -101,8 +101,8 @@ export default function RegistrationForm() {
       <div className={styles.heroSection}>
         <div className={styles.heroVectors}></div>
         
-        <div style={{ zIndex: 2, marginBottom: 'auto' }}>
-          <img src="/logo-eft.png" alt="EFT Logo" style={{ height: '80px', filter: 'brightness(0) invert(1)', marginTop: '20px' }} />
+        <div style={{ position: 'absolute', top: '30px', left: '0', width: '100%', textAlign: 'center', zIndex: 10 }}>
+          <img src="/logo-eft.png" alt="EFT Logo" style={{ height: '70px', filter: 'brightness(0) invert(1)' }} />
         </div>
 
         <h1 className={styles.heroTitle}>
