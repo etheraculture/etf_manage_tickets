@@ -541,7 +541,7 @@ img {
 
 .admin-sidebar {
   width: 260px;
-  background: rgba(6, 21, 32, 0.95);
+  background: var(--color-bg-card);
   border-right: 1px solid var(--color-border);
   padding: var(--space-xl) 0;
   display: flex;
@@ -1312,6 +1312,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 0.95rem;
 }
 
+.mobile-bottom-nav {
+  display: none;
+}
+
 /* ============================================================
    DUAL-RENDER & MODERN MOBILE CARDS
    ============================================================ */
@@ -1429,6 +1433,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-size: 0.70rem;
     font-weight: 500;
     transition: all 0.2s;
+  }
+
+  .desktop-only-link {
+    display: none !important;
   }
 
   .nav-item-mobile.active {
