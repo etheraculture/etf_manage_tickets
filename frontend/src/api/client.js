@@ -1,11 +1,8 @@
 import axios from 'axios';
 
-// In dev (Vite proxy su localhost:5173) usa /api
-// In produzione usa direttamente il backend sulla porta 3102
-const isDevProxy = window.location.port === '5173';
-const baseURL = isDevProxy
-  ? '/api'
-  : `http://${window.location.hostname}:3102/api`;
+// Utilizza sempre il proxy relativo '/api'
+// Funzionerà perfettamente su HTTPS (ticket.etheraculture.com/api) grazie al proxy di Vite preview/Nginx
+const baseURL = '/api';
 
 const api = axios.create({
   baseURL,
