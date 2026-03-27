@@ -22,21 +22,25 @@ export default function QrScanner({ onScan, enabled = true }) {
         html5Qr = new Html5Qrcode(scannerId);
         html5QrRef.current = html5Qr;
 
-        await html5Qr.start(
-          { facingMode: 'environment' },
-          {
-            fps: 15,
-            qrbox: { width: 250, height: 250 },
-          },
-          (decodedText) => {
-            if (onScan) onScan(decodedText);
-          },
-          () => {} // ignore errors during scanning
-        );
+        const config = { fps: 15, qrbox: { width: 250, height: 250 } };
+        const onSuccess = (decodedText) => {
+          if (onScan) onScan(decodedText);
+        };
+        const onFail = () => {}; // ignore read errors
+
+        try {
+          // Tentativo 1: Fotocamera Posteriore (Mobile)
+          await html5Qr.start({ facingMode: 'environment' }, config, onSuccess, onFail);
+        } catch (errEnvironment) {
+          console.log('Fotocamera posteriore non trovata o negata, tento fotocamera frontale/webcam...', errEnvironment);
+          // Tentativo 2: WebCam frontale (Laptops/Macbook)
+          await html5Qr.start({ facingMode: 'user' }, config, onSuccess, onFail);
+        }
+        
         running = true;
       } catch (err) {
-        console.error('Errore avvio scanner:', err);
-        setError('Impossibile accedere alla fotocamera. Verifica i permessi.');
+        console.error('Errore avvio scanner fotocamere:', err);
+        setError('Impossibile accedere alla fotocamera. Verifica i permessi e di essere su rete HTTPS/localhost.');
       }
     }
 
