@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    allowedHosts: ['ticket.etheraculture.com'],
     proxy: {
       '/api': {
         target: 'http://localhost:3102',
@@ -15,6 +16,7 @@ export default defineConfig({
   preview: {
     port: 3103,
     host: true,
+    allowedHosts: ['ticket.etheraculture.com'],
     proxy: {
       '/api': {
         target: 'http://localhost:3102',
