@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/client';
-import { Search, Loader2, ArrowLeft, X, Edit3, Trash2, Mail, School, GraduationCap, Ticket, CheckCircle2, XCircle, Star } from 'lucide-react';
+import { Search, Loader2, ArrowLeft, X, Edit3, Trash2, Mail, School, GraduationCap, Ticket, CheckCircle2, XCircle, Star, Filter, ChevronDown, ChevronUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -14,6 +14,7 @@ export default function AdminStudenti() {
   const [filterScuola, setFilterScuola] = useState('tutte');
   const [filterClasse, setFilterClasse] = useState('tutte');
   const [filterRappresentante, setFilterRappresentante] = useState('tutti');
+  const [showFilters, setShowFilters] = useState(false);
 
   const [scuole, setScuole] = useState([]);
 
@@ -133,38 +134,50 @@ export default function AdminStudenti() {
         </div>
       </div>
 
-      <div className="card" style={{ marginBottom: 'var(--space-xl)', padding: 'var(--space-lg)' }}>
-        <div className="responsive-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-md)' }}>
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Cerca Testo</label>
-            <div style={{ position: 'relative' }}>
-              <Search size={18} style={{ position: 'absolute', left: '16px', top: '16px', color: 'var(--color-gray-500)' }} />
-              <input type="text" className="form-input" style={{ paddingLeft: '48px', height: '48px' }} placeholder="Nome, email, ticket..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+      <div className="card" style={{ marginBottom: 'var(--space-xl)', padding: 'var(--space-md)' }}>
+        <button 
+          onClick={() => setShowFilters(!showFilters)} 
+          style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', outline: 'none', padding: '8px 0' }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, color: 'var(--color-gray-100)', fontSize: '1.05rem' }}>
+            <Filter size={20} /> Filtri di Ricerca
+          </div>
+          {showFilters ? <ChevronUp size={20} className="text-gray-400" /> : <ChevronDown size={20} className="text-gray-400" />}
+        </button>
+
+        {showFilters && (
+          <div className="responsive-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-md)', marginTop: 'var(--space-md)', paddingTop: 'var(--space-md)', borderTop: '1px solid var(--color-border)' }}>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Cerca Testo</label>
+              <div style={{ position: 'relative' }}>
+                <Search size={18} style={{ position: 'absolute', left: '16px', top: '16px', color: 'var(--color-gray-500)' }} />
+                <input type="text" className="form-input" style={{ paddingLeft: '48px', height: '48px' }} placeholder="Nome, email, ticket..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+              </div>
+            </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Scuola</label>
+              <select className="form-select" style={{ height: '48px' }} value={filterScuola} onChange={(e) => setFilterScuola(e.target.value)}>
+                <option value="tutte">Tutte le scuole</option>
+                {scuoleUniche.map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Classe</label>
+              <select className="form-select" style={{ height: '48px' }} value={filterClasse} onChange={(e) => setFilterClasse(e.target.value)}>
+                <option value="tutte">Tutte le classi</option>
+                {classiDisponibili.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Ruolo</label>
+              <select className="form-select" style={{ height: '48px' }} value={filterRappresentante} onChange={(e) => setFilterRappresentante(e.target.value)}>
+                <option value="tutti">Tutti</option>
+                <option value="si">Solo Rappresentanti</option>
+                <option value="no">Escludi Rappresentanti</option>
+              </select>
             </div>
           </div>
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Scuola</label>
-            <select className="form-select" style={{ height: '48px' }} value={filterScuola} onChange={(e) => setFilterScuola(e.target.value)}>
-              <option value="tutte">Tutte le scuole</option>
-              {scuoleUniche.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
-          </div>
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Classe</label>
-            <select className="form-select" style={{ height: '48px' }} value={filterClasse} onChange={(e) => setFilterClasse(e.target.value)}>
-              <option value="tutte">Tutte le classi</option>
-              {classiDisponibili.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </div>
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Ruolo</label>
-            <select className="form-select" style={{ height: '48px' }} value={filterRappresentante} onChange={(e) => setFilterRappresentante(e.target.value)}>
-              <option value="tutti">Tutti</option>
-              <option value="si">Solo Rappresentanti</option>
-              <option value="no">Escludi Rappresentanti</option>
-            </select>
-          </div>
-        </div>
+        )}
       </div>
 
       {filtered.length === 0 ? (

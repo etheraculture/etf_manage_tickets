@@ -19,8 +19,8 @@ export default function AdminLayout({ children }) {
       {/* Sidebar */}
       <aside className={`admin-sidebar ${mobileOpen ? 'open' : ''}`}>
         <div className="sidebar-header" style={{ paddingBottom: '32px' }}>
-          <img src="/logo-ethera.png" alt="Ethera" style={{ width: '160px', marginBottom: '24px', display: 'block' }} />
-          <div className="sidebar-brand">ETHERA FUTURE TALKS</div>
+          <img src="/logo-ethera.png" alt="Ethera" style={{ width: '64px', marginBottom: '24px', display: 'block' }} />
+          <div className="sidebar-brand">Ethera Tickets</div>
           <div className="sidebar-sub">Pannello Admin</div>
         </div>
 
@@ -70,6 +70,11 @@ export default function AdminLayout({ children }) {
             <ScanLine size={32} />
           </NavLink>
         </div>
+
+        <NavLink to="/admin/scansioni" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}>
+          <ClipboardList size={24} />
+          <span>Log</span>
+        </NavLink>
 
         <NavLink to="/admin/scuole" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}>
           <School size={24} />
