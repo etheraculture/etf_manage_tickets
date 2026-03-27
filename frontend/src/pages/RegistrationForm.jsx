@@ -85,7 +85,7 @@ export default function RegistrationForm() {
     <div className="registration-page">
       <div className="registration-container">
         <div className="registration-header">
-          <img src="/logo-ethera.png" alt="Ethera" className="registration-logo" />
+          <img src="/logo-eft.png" alt="Ethera Future Talks" className="registration-logo" />
           <h1 className="registration-title">ISCRIVITI ALL'EVENTO</h1>
           <p className="registration-subtitle">
             Seconda Edizione 2026 — <span>27 / 28 / 29 Giugno</span>

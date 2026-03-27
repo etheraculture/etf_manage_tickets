@@ -116,8 +116,8 @@ export default function AdminScuole() {
               <h1 className="admin-page-title">SCUOLE</h1>
               <p className="admin-page-subtitle">Gestisci l'elenco delle scuole partecipanti</p>
             </div>
-            <button className="btn btn-primary" onClick={openAdd}>
-              <Plus size={18} /> Aggiungi Scuola
+            <button className="btn btn-primary" style={{ padding: '12px 24px', fontSize: '1.05rem', fontWeight: 600, flex: '1 1 auto', justifyContent: 'center' }} onClick={openAdd}>
+              <Plus size={20} /> Aggiungi Scuola
             </button>
           </div>
         </div>

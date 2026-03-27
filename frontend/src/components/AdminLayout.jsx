@@ -14,16 +14,12 @@ export default function AdminLayout({ children }) {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  function handleLogout() {
-    localStorage.removeItem('ethera_admin_token');
-    navigate('/admin');
-  }
-
   return (
     <div className="admin-layout">
       {/* Sidebar */}
       <aside className={`admin-sidebar ${mobileOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
+        <div className="sidebar-header" style={{ paddingBottom: '32px' }}>
+          <img src="/logo-ethera.png" alt="Ethera" style={{ width: '160px', marginBottom: '24px', display: 'block' }} />
           <div className="sidebar-brand">ETHERA FUTURE TALKS</div>
           <div className="sidebar-sub">Pannello Admin</div>
         </div>
@@ -51,13 +47,6 @@ export default function AdminLayout({ children }) {
             Check-in Scanner
           </NavLink>
         </nav>
-
-        <div className="sidebar-footer">
-          <button className="sidebar-link" onClick={handleLogout} style={{ width: '100%', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left' }}>
-            <LogOut size={20} />
-            Logout
-          </button>
-        </div>
       </aside>
 
       {/* Main content */}
@@ -86,10 +75,6 @@ export default function AdminLayout({ children }) {
           <School size={24} />
           <span>Scuole</span>
         </NavLink>
-        <button onClick={handleLogout} className="mobile-nav-item text-error">
-          <LogOut size={24} />
-          <span>Esci</span>
-        </button>
       </nav>
 
       {/* Mobile overlay */}
