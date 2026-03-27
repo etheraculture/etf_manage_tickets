@@ -258,7 +258,7 @@ export default function RegistrationForm() {
                     checked={form.rappresentante_istituto}
                     onChange={e => handleChange('rappresentante_istituto', e.target.checked)}
                   />
-                  <span className={styles.checkboxLabel}>Sono Rappresentante di Istituto</span>
+                  <span className={styles.checkboxLabel}>Sono Rappresentante di Classe</span>
                 </label>
               </div>
             )}
