@@ -1,67 +1,62 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 
 export default function QrScanner({ onScan, enabled = true }) {
-  const scannerRef = useRef(null);
-  const html5QrRef = useRef(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!enabled) return;
 
-    const scannerId = 'qr-reader-' + Date.now();
-    if (scannerRef.current) {
-      scannerRef.current.id = scannerId;
-    }
+    let html5Qr = new Html5Qrcode("qr-reader-box");
+    let isStarted = false;
 
-    let html5Qr = null;
-    let running = false;
-
-    async function startScanner() {
-      try {
-        html5Qr = new Html5Qrcode(scannerId);
-        html5QrRef.current = html5Qr;
-
-        const config = { fps: 15, qrbox: { width: 250, height: 250 } };
-        const onSuccess = (decodedText) => {
-          if (onScan) onScan(decodedText);
-        };
-        const onFail = () => {}; // ignore read errors
-
-        try {
-          // Tentativo 1: Fotocamera Posteriore (Mobile)
-          await html5Qr.start({ facingMode: 'environment' }, config, onSuccess, onFail);
-        } catch (errEnvironment) {
-          console.log('Fotocamera posteriore non trovata o negata, tento fotocamera frontale/webcam...', errEnvironment);
-          // Tentativo 2: WebCam frontale (Laptops/Macbook)
-          await html5Qr.start({ facingMode: 'user' }, config, onSuccess, onFail);
+    Html5Qrcode.getCameras().then(cameras => {
+      if (cameras && cameras.length > 0) {
+        // Cerca fotocamera posteriore altrimenti usa la prima (es. webcam)
+        let camId = cameras[0].id;
+        for (let c of cameras) {
+          if (c.label.toLowerCase().includes('back') || c.label.toLowerCase().includes('environment') || c.label.toLowerCase().includes('posteriore')) {
+            camId = c.id;
+            break;
+          }
         }
         
-        running = true;
-      } catch (err) {
-        console.error('Errore avvio scanner fotocamere:', err);
-        setError('Impossibile accedere alla fotocamera. Verifica i permessi e di essere su rete HTTPS/localhost.');
-      }
-    }
+        html5Qr.start(
+          camId, 
+          { fps: 15, qrbox: { width: 250, height: 250 } },
+          (text) => { if (onScan) onScan(text); },
+          (err) => {} // ignore scan jitter
+        ).then(() => {
+          isStarted = true;
+        }).catch(err => {
+          console.error(err);
+          setError("Errore apertura otturatore: " + err.message);
+        });
 
-    startScanner();
+      } else {
+        setError("Nessuna videocamera fisicamente trovata su questo dispositivo.");
+      }
+    }).catch(err => {
+      console.error(err);
+      setError("ACCESSO NEGATO: Il browser blocca la fotocamera se non sei in HTTPS o se non accetti i permessi.");
+    });
 
     return () => {
-      if (html5QrRef.current && running) {
-        html5QrRef.current.stop().catch(() => {});
+      if (isStarted) {
+        html5Qr.stop().then(() => html5Qr.clear()).catch(() => {});
       }
     };
-  }, [enabled]);
+  }, [enabled, onScan]);
 
   return (
-    <div>
-      <div className="scanner-box">
-        <div ref={scannerRef} style={{ width: '100%', height: '100%' }} />
+    <div style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
+      <div id="qr-reader-box" style={{ width: '100%', minHeight: '300px', background: '#e2e8f0', borderRadius: 16, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ color: '#94a3b8', fontWeight: 500 }}>Inizializzazione Camera...</span>
       </div>
       {error && (
-        <p style={{ color: 'var(--color-error)', textAlign: 'center', marginTop: 12, fontSize: '0.85rem' }}>
+        <div style={{ color: 'var(--color-error)', marginTop: '16px', textAlign: 'center', fontSize: '0.9rem', fontWeight: 600, padding: '12px', background: '#fee2e2', borderRadius: '8px' }}>
           {error}
-        </p>
+        </div>
       )}
     </div>
   );
