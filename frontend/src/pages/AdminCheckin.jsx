@@ -12,7 +12,7 @@ export default function AdminCheckin() {
   const [manualCode, setManualCode] = useState('');
   const [result, setResult] = useState(null);
   const [processing, setProcessing] = useState(false);
-  const [scannerEnabled, setScannerEnabled] = useState(false);
+  const [scannerEnabled, setScannerEnabled] = useState(true);
   const inputRef = useRef(null);
   const resetTimerRef = useRef(null);
 
