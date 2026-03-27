@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Send, Loader } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../api/client';
+import styles from './RegistrationForm.module.css';
 
 export default function RegistrationForm() {
   const navigate = useNavigate();
@@ -23,9 +23,15 @@ export default function RegistrationForm() {
   });
 
   useEffect(() => {
+    // Override del background sul body solo per questa pagina (se necessario)
+    document.body.style.backgroundColor = '#ffffff';
     api.get('/scuole')
       .then(res => setSchools(res.data.data || []))
       .catch(() => toast.error('Errore caricamento scuole'));
+      
+    return () => {
+      document.body.style.backgroundColor = '';
+    };
   }, []);
 
   function validate() {
@@ -84,181 +90,190 @@ export default function RegistrationForm() {
   }
 
   return (
-    <div className="registration-page">
-      <div className="registration-container">
-        <div className="registration-header">
-          <img src="/logo-eft.png" alt="Ethera Future Talks" className="registration-logo" />
-          <h1 className="registration-title">ISCRIVITI ALL'EVENTO</h1>
-          <p className="registration-subtitle">
-            Seconda Edizione 2026 — <span>27 / 28 / 29 Giugno</span>
-          </p>
+    <div className={styles.pageWrapper}>
+      
+      {/* Navbar overlay in alto */}
+      <div className={styles.navbar}>
+        <div style={{ color: '#fff', fontSize: '0.8rem', letterSpacing: '0.1em', fontWeight: 600 }}>ETHERA CULTURE</div>
+        <img src="/logo-eft.png" alt="EFT Logo" />
+      </div>
+
+      {/* Hero Section (Dark Theme) */}
+      <div className={styles.heroSection}>
+        <div className={styles.heroVectors}></div>
+        <div className={styles.heroPreTitle}>FOR YOUTH 17–25</div>
+        <h1 className={styles.heroTitle}>
+          ETHERA<br />
+          FUTURE TALKS
+        </h1>
+        <div className={styles.heroSubtitle}>
+          NEXT EDITION <span>8-9-10 APRILE 2026</span>
         </div>
+      </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="card">
-            {/* Sezione 1: Dati Personali */}
-            <div className="form-section">
-              <div className="form-section-title">Dati Personali</div>
+      {/* Form Section (Light Theme) */}
+      <div className={styles.formBody}>
+        <div className={styles.formContainer}>
+          <h2 className={styles.formMainHeading}>IL TUO<br/>DOMANI<br/>INIZIA QUI.</h2>
+          <p className={styles.formMainSubHeading}>
+            Compila il modulo per confermare la tua partecipazione alla seconda edizione di Ethera Future Talks. 
+            L'accesso è nominale e richiede la registrazione.
+          </p>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="nome">Nome</label>
-                  <input
-                    id="nome"
-                    type="text"
-                    className={`form-input ${errors.nome ? 'error' : ''}`}
-                    placeholder="Il tuo nome"
-                    value={form.nome}
-                    onChange={e => handleChange('nome', e.target.value)}
-                    maxLength={100}
-                  />
-                  {errors.nome && <span className="form-error-text">{errors.nome}</span>}
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label" htmlFor="cognome">Cognome</label>
-                  <input
-                    id="cognome"
-                    type="text"
-                    className={`form-input ${errors.cognome ? 'error' : ''}`}
-                    placeholder="Il tuo cognome"
-                    value={form.cognome}
-                    onChange={e => handleChange('cognome', e.target.value)}
-                    maxLength={100}
-                  />
-                  {errors.cognome && <span className="form-error-text">{errors.cognome}</span>}
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="eta">Età</label>
-                  <input
-                    id="eta"
-                    type="number"
-                    className={`form-input ${errors.eta ? 'error' : ''}`}
-                    placeholder="Es: 17"
-                    value={form.eta}
-                    onChange={e => handleChange('eta', e.target.value)}
-                    min={13}
-                    max={99}
-                  />
-                  {errors.eta && <span className="form-error-text">{errors.eta}</span>}
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label" htmlFor="citta">Città</label>
-                  <input
-                    id="citta"
-                    type="text"
-                    className={`form-input ${errors.citta ? 'error' : ''}`}
-                    placeholder="La tua città"
-                    value={form.citta}
-                    onChange={e => handleChange('citta', e.target.value)}
-                    maxLength={100}
-                  />
-                  {errors.citta && <span className="form-error-text">{errors.citta}</span>}
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="email">Email</label>
+          <form onSubmit={handleSubmit}>
+            
+            <div className={styles.formSectionTitle}>
+              <span className={styles.formSectionBadge}>STEP 01</span>
+              Dati Personali
+            </div>
+            
+            <div className={styles.formGridRow}>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Nome</label>
                 <input
-                  id="email"
-                  type="email"
-                  className={`form-input ${errors.email ? 'error' : ''}`}
-                  placeholder="la.tua@email.com"
-                  value={form.email}
-                  onChange={e => handleChange('email', e.target.value)}
-                  maxLength={255}
+                  type="text"
+                  className={`${styles.formInput} ${errors.nome ? styles.formInputError : ''}`}
+                  placeholder="Es: Mario"
+                  value={form.nome}
+                  onChange={e => handleChange('nome', e.target.value)}
+                  maxLength={50}
                 />
-                {errors.email && <span className="form-error-text">{errors.email}</span>}
+                {errors.nome && <span className={styles.errorText}>{errors.nome}</span>}
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Cognome</label>
+                <input
+                  type="text"
+                  className={`${styles.formInput} ${errors.cognome ? styles.formInputError : ''}`}
+                  placeholder="Es: Rossi"
+                  value={form.cognome}
+                  onChange={e => handleChange('cognome', e.target.value)}
+                  maxLength={50}
+                />
+                {errors.cognome && <span className={styles.errorText}>{errors.cognome}</span>}
               </div>
             </div>
 
-            <div className="divider" />
+            <div className={styles.formGridRow}>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Età</label>
+                <input
+                  type="number"
+                  className={`${styles.formInput} ${errors.eta ? styles.formInputError : ''}`}
+                  placeholder="Es: 17"
+                  value={form.eta}
+                  onChange={e => handleChange('eta', e.target.value)}
+                  min="13" max="99"
+                />
+                {errors.eta && <span className={styles.errorText}>{errors.eta}</span>}
+              </div>
 
-            {/* Sezione 2: Scuola */}
-            <div className="form-section">
-              <div className="form-section-title">Scuola di Provenienza</div>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Città di Residenza</label>
+                <input
+                  type="text"
+                  className={`${styles.formInput} ${errors.citta ? styles.formInputError : ''}`}
+                  placeholder="Es: Bari"
+                  value={form.citta}
+                  onChange={e => handleChange('citta', e.target.value)}
+                  maxLength={50}
+                />
+                {errors.citta && <span className={styles.errorText}>{errors.citta}</span>}
+              </div>
+            </div>
 
-              <div className="form-group">
-                <label className="form-label" htmlFor="scuola">Scuola</label>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Indirizzo E-mail</label>
+              <input
+                type="email"
+                className={`${styles.formInput} ${errors.email ? styles.formInputError : ''}`}
+                placeholder="mario.rossi@email.com"
+                value={form.email}
+                onChange={e => handleChange('email', e.target.value)}
+                maxLength={100}
+              />
+              {errors.email && <span className={styles.errorText}>{errors.email}</span>}
+            </div>
+
+            <div className={styles.formSectionTitle}>
+              <span className={styles.formSectionBadge}>STEP 02</span>
+              Dati Scolastici
+            </div>
+
+            <div className={styles.formGridRow}>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Scuola</label>
                 <select
-                  id="scuola"
-                  className={`form-select ${errors.scuola_id ? 'error' : ''}`}
+                  className={`${styles.formSelect} ${errors.scuola_id ? styles.formSelectError : ''}`}
                   value={form.scuola_id}
                   onChange={e => handleChange('scuola_id', e.target.value)}
                 >
-                  <option value="">Seleziona la tua scuola</option>
+                  <option value="">-- Seleziona il tuo o un altro istituto --</option>
                   {schools.map(s => (
-                    <option key={s.id} value={s.id}>{s.nome} — {s.citta}</option>
+                    <option key={s.id} value={s.id}>{s.nome} - {s.citta}</option>
                   ))}
                 </select>
-                {errors.scuola_id && <span className="form-error-text">{errors.scuola_id}</span>}
+                {errors.scuola_id && <span className={styles.errorText}>{errors.scuola_id}</span>}
               </div>
 
-              <div className="form-group">
-                <label className="form-label" htmlFor="classe">Classe</label>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Classe</label>
                 <input
-                  id="classe"
                   type="text"
-                  className={`form-input ${errors.classe ? 'error' : ''}`}
+                  className={`${styles.formInput} ${errors.classe ? styles.formInputError : ''}`}
                   placeholder="Es: 4A"
                   value={form.classe}
                   onChange={e => handleChange('classe', e.target.value)}
                   maxLength={20}
                 />
-                {errors.classe && <span className="form-error-text">{errors.classe}</span>}
-              </div>
-
-              <div className="form-group">
-                <label className="form-checkbox-wrapper">
-                  <input
-                    type="checkbox"
-                    checked={form.rappresentante_istituto}
-                    onChange={e => handleChange('rappresentante_istituto', e.target.checked)}
-                  />
-                  <span>Sono Rappresentante di Istituto</span>
-                </label>
-              </div>
-
-              <div className="form-group">
-                <label className="form-checkbox-wrapper" style={{ alignItems: 'flex-start' }}>
-                  <input
-                    type="checkbox"
-                    checked={form.privacy_accepted}
-                    onChange={e => handleChange('privacy_accepted', e.target.checked)}
-                    style={{ marginTop: '4px' }}
-                  />
-                  <span style={{ fontSize: '0.82rem', lineHeight: 1.5, color: '#475569' }}>
-                    Ho letto l'<a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-teal-light)', textDecoration: 'underline' }}>Informativa Privacy</a> e accetto il trattamento dei miei dati per l'iscrizione all'evento. Se ho meno di 14 anni, un genitore o tutore ha autorizzato questa iscrizione.
-                  </span>
-                </label>
-                {errors.privacy_accepted && <span className="form-error-text">{errors.privacy_accepted}</span>}
+                {errors.classe && <span className={styles.errorText}>{errors.classe}</span>}
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary btn-lg btn-full" disabled={loading}>
+            <label className={styles.checkboxWrapper}>
+              <input
+                type="checkbox"
+                className={styles.checkboxInput}
+                checked={form.rappresentante_istituto}
+                onChange={e => handleChange('rappresentante_istituto', e.target.checked)}
+              />
+              <span className={styles.checkboxLabel}>Sono Rappresentante di Istituto</span>
+            </label>
+
+            <div style={{ marginTop: '24px' }}>
+              <label className={styles.checkboxWrapper}>
+                <input
+                  type="checkbox"
+                  className={styles.checkboxInput}
+                  checked={form.privacy_accepted}
+                  onChange={e => handleChange('privacy_accepted', e.target.checked)}
+                />
+                <span className={styles.checkboxLabel}>
+                  Ho letto l'<a href="/privacy" target="_blank" rel="noopener noreferrer">Informativa Privacy</a> e accetto il trattamento dei miei dati per l'iscrizione all'evento. Se ho meno di 14 anni, un genitore o tutore ha autorizzato questa iscrizione.
+                </span>
+              </label>
+              {errors.privacy_accepted && <span className={styles.errorText} style={{ display: 'block', marginTop: '8px', paddingLeft: '16px' }}>{errors.privacy_accepted}</span>}
+            </div>
+
+            <button type="submit" className={styles.submitBtn} disabled={loading}>
               {loading ? (
                 <>
-                  <Loader size={20} className="spinner" style={{ border: 'none', width: 20, height: 20 }} />
-                  Registrazione in corso...
+                  <div className={styles.spinner}></div>
+                  IN ELABORAZIONE...
                 </>
               ) : (
-                <>
-                  <Send size={20} />
-                  Iscriviti all'Evento
-                </>
+                "CONFERMA E OTTIENI PASS"
               )}
             </button>
-          </div>
-        </form>
+          </form>
 
-        <div style={{ textAlign: 'center', marginTop: '24px', paddingBottom: '16px' }}>
-          <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#64748b', fontSize: '0.82rem', textDecoration: 'underline' }}>
-            Informativa sulla Privacy (GDPR)
-          </a>
+          <div style={{ textAlign: 'center', margin: '40px 0', paddingBottom: '24px' }}>
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8', fontSize: '0.85rem', textDecoration: 'underline' }}>
+              Informativa completa sul Trattamento dei Dati (GDPR)
+            </a>
+          </div>
+
         </div>
       </div>
     </div>
