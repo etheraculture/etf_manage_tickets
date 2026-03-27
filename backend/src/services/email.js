@@ -48,77 +48,79 @@ function buildEmailHtml(nome, codiceBiglietto) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body style="margin:0;padding:0;background-color:#0A1E2A;font-family:'Helvetica Neue',Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0A1E2A;padding:40px 20px;">
+<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:'Helvetica Neue', Arial, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f1f5f9;padding:40px 20px;">
     <tr>
       <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="background-color:#0E1E2E;border-radius:16px;overflow:hidden;border:1px solid rgba(26,107,122,0.3);">
-          <!-- Header -->
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 25px rgba(15,23,42,0.1);">
+          <!-- Header (Dark) -->
           <tr>
-            <td style="padding:40px 40px 20px;text-align:center;background:linear-gradient(135deg,#0E4D5A,#1A6B7A);">
-              <h1 style="margin:0;color:#FFFFFF;font-size:28px;font-weight:700;letter-spacing:2px;">
+            <td style="padding:40px;text-align:center;background-color:#0b1120;">
+              <img src="https://ticket.etheraculture.com/logo-eft.png" alt="EFT Logo" width="60" style="display:block;margin:0 auto 20px;filter:brightness(0) invert(1);" />
+              <h1 style="margin:0;color:#ffffff;font-size:28px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">
                 ETHERA FUTURE TALKS
               </h1>
-              <p style="margin:8px 0 0;color:#B0BEC5;font-size:14px;letter-spacing:1px;">
+              <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;letter-spacing:2px;text-transform:uppercase;">
                 Seconda Edizione 2026
               </p>
             </td>
           </tr>
 
-          <!-- Body -->
+          <!-- Body (Light) -->
           <tr>
-            <td style="padding:40px;">
-              <p style="color:#F0F4F5;font-size:18px;margin:0 0 20px;">
-                Ciao <strong>${nome}</strong>,
+            <td style="padding:40px;text-align:center;">
+              <p style="color:#0f172a;font-size:20px;font-weight:600;margin:0 0 16px;">
+                Ciao ${nome}, la tua iscrizione è confermata!
               </p>
-              <p style="color:#B0BEC5;font-size:15px;line-height:1.6;margin:0 0 30px;">
-                La tua iscrizione all'evento <strong style="color:#2A8B9A;">Ethera Future Talks — Seconda Edizione 2026</strong> è confermata!
+              <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0 0 32px;">
+                Sei ufficialmente registrato per partecipare a <strong>Ethera Future Talks 2026</strong>. Non vediamo l'ora di immaginare il futuro insieme a te.
               </p>
 
-              <!-- Dettagli evento -->
-              <table width="100%" cellpadding="12" cellspacing="0" style="background-color:rgba(26,107,122,0.15);border-radius:10px;margin-bottom:30px;border:1px solid rgba(26,107,122,0.2);">
+              <!-- Ticket Box -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8fafc;border-radius:24px;border:2px solid #e2e8f0;margin-bottom:32px;overflow:hidden;">
                 <tr>
-                  <td style="color:#B0BEC5;font-size:13px;border-bottom:1px solid rgba(26,107,122,0.15);">📅 Data</td>
-                  <td style="color:#F0F4F5;font-size:14px;font-weight:600;border-bottom:1px solid rgba(26,107,122,0.15);">27 — 28 — 29 Giugno 2026</td>
+                  <td style="padding:24px;text-align:center;border-bottom:2px solid #e2e8f0;">
+                    <p style="margin:0 0 8px;color:#94a3b8;font-size:12px;font-weight:700;letter-spacing:2px;">CODICE ACCESSO</p>
+                    <p style="margin:0;color:#0f172a;font-size:36px;font-weight:800;letter-spacing:4px;">${codiceBiglietto}</p>
+                  </td>
                 </tr>
                 <tr>
-                  <td style="color:#B0BEC5;font-size:13px;">📍 Luogo</td>
-                  <td style="color:#F0F4F5;font-size:14px;font-weight:600;">Da comunicare</td>
+                  <td align="center" style="padding:32px 24px;">
+                    <div style="background:#ffffff;padding:16px;border-radius:16px;border:2px solid #f1f5f9;display:inline-block;">
+                      <img src="cid:qrcode" alt="QR Code" width="200" height="200" style="display:block;" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background:linear-gradient(135deg, #f97316, #fb923c);padding:16px;">
+                    <p style="margin:0;color:#ffffff;font-size:14px;font-weight:700;letter-spacing:1px;text-align:center;">
+                      ⚡ MOSTRA QUESTO QR ALL'INGRESSO ⚡
+                    </p>
+                  </td>
                 </tr>
               </table>
 
-              <!-- Codice Biglietto -->
-              <div style="text-align:center;margin-bottom:30px;">
-                <p style="color:#B0BEC5;font-size:13px;margin:0 0 10px;text-transform:uppercase;letter-spacing:2px;">
-                  Il tuo codice biglietto
-                </p>
-                <div style="display:inline-block;background:linear-gradient(135deg,#1A6B7A,#0E4D5A);padding:16px 40px;border-radius:10px;border:2px solid #2A8B9A;">
-                  <span style="color:#FFFFFF;font-size:36px;font-weight:700;letter-spacing:8px;font-family:'Courier New',monospace;">
-                    ${codiceBiglietto}
-                  </span>
-                </div>
-              </div>
+              <!-- Dettagli evento -->
+              <table width="100%" cellpadding="16" cellspacing="0" style="background-color:#ffffff;border:2px solid #f1f5f9;border-radius:12px;margin-bottom:16px;">
+                <tr>
+                  <td width="50%" style="border-right:2px solid #f1f5f9;text-align:center;">
+                    <p style="margin:0 0 4px;color:#94a3b8;font-size:12px;font-weight:700;letter-spacing:1px;">DATA</p>
+                    <p style="margin:0;color:#0f172a;font-size:14px;font-weight:700;">8-10 Aprile 2026</p>
+                  </td>
+                  <td width="50%" style="text-align:center;">
+                    <p style="margin:0 0 4px;color:#94a3b8;font-size:12px;font-weight:700;letter-spacing:1px;">LUOGO</p>
+                    <p style="margin:0;color:#0f172a;font-size:14px;font-weight:700;">Molfetta (BA)</p>
+                  </td>
+                </tr>
+              </table>
 
-              <!-- QR Code -->
-              <div style="text-align:center;margin-bottom:30px;">
-                <p style="color:#B0BEC5;font-size:13px;margin:0 0 12px;text-transform:uppercase;letter-spacing:2px;">
-                  QR Code di accesso
-                </p>
-                <div style="display:inline-block;background:#FFFFFF;padding:12px;border-radius:12px;">
-                  <img src="cid:qrcode" alt="QR Code" width="200" height="200" style="display:block;" />
-                </div>
-              </div>
-
-              <p style="color:#E8842C;font-size:14px;font-weight:600;text-align:center;margin:0 0 10px;">
-                ⚡ Presenta questo QR code all'ingresso dell'evento
-              </p>
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td style="padding:20px 40px;text-align:center;border-top:1px solid rgba(26,107,122,0.2);">
-              <p style="color:#546E7A;font-size:12px;margin:0;">
+            <td style="padding:24px;text-align:center;background-color:#f8fafc;border-top:2px solid #e2e8f0;">
+              <p style="color:#64748b;font-size:12px;margin:0;">
                 Ethera Culture APS — etheraculture.com
               </p>
             </td>

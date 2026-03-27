@@ -97,18 +97,15 @@ export default function RegistrationForm() {
   return (
     <div className={styles.pageWrapper}>
       
-      {/* Navbar overlay in alto */}
-      <div className={styles.navbar}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <img src="/logo-eft.png" alt="EFT Logo" style={{ height: '32px', filter: 'brightness(0) invert(1)' }} />
-          <div style={{ color: '#fff', fontSize: '0.9rem', letterSpacing: '0.1em', fontWeight: 600 }}>ETHERA CULTURE</div>
-        </div>
-      </div>
-
       {/* Hero Section (Dark Theme) */}
       <div className={styles.heroSection}>
         <div className={styles.heroVectors}></div>
-        <h1 className={styles.heroTitle} style={{ marginTop: 'auto' }}>
+        
+        <div style={{ zIndex: 2, marginBottom: 'auto' }}>
+          <img src="/logo-eft.png" alt="EFT Logo" style={{ height: '80px', filter: 'brightness(0) invert(1)', marginTop: '20px' }} />
+        </div>
+
+        <h1 className={styles.heroTitle}>
           ETHERA<br />
           FUTURE TALKS
         </h1>

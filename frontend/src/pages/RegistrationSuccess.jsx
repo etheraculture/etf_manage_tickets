@@ -34,18 +34,15 @@ export default function RegistrationSuccess() {
   return (
     <div className={styles.pageWrapper}>
       
-      {/* Navbar overlay */}
-      <div className={styles.navbar}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <img src="/logo-eft.png" alt="EFT Logo" style={{ height: '32px', filter: 'brightness(0) invert(1)' }} />
-          <div style={{ color: '#fff', fontSize: '0.9rem', letterSpacing: '0.1em', fontWeight: 600 }}>ETHERA FUTURE TALKS</div>
-        </div>
-      </div>
-
       {/* Hero Section */}
       <div className={styles.heroSection} style={{ minHeight: '40vh', paddingBottom: '40px' }}>
         <div className={styles.heroVectors}></div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', zIndex: 2 }}>
+        
+        <div style={{ zIndex: 2, position: 'absolute', top: '40px', left: '24px' }}>
+          <img src="/logo-eft.png" alt="EFT Logo" style={{ height: '60px', filter: 'brightness(0) invert(1)' }} />
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', zIndex: 2, marginTop: 'auto' }}>
           <div style={{ background: 'rgba(46, 204, 113, 0.2)', padding: '12px', borderRadius: '50%' }}>
             <CheckCircle size={32} color="#2ECC71" />
           </div>
