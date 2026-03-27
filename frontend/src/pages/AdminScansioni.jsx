@@ -34,7 +34,7 @@ export default function AdminScansioni() {
   return (
     <div>
       <div className="admin-page-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-        <button className="back-btn" onClick={() => navigate(-1)} aria-label="Torna indietro">
+        <button className="back-btn" onClick={() => navigate('/admin/dashboard')} aria-label="Torna indietro">
           <ArrowLeft size={28} />
         </button>
         <div style={{ flex: 1 }}>

@@ -46,9 +46,6 @@ export default function AdminDashboard() {
   return (
     <div>
       <div className="admin-page-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-        <button className="back-btn" onClick={() => navigate(-1)} aria-label="Torna indietro">
-          <ArrowLeft size={28} />
-        </button>
         <div>
           <h1 className="admin-page-title">DASHBOARD</h1>
           <p className="admin-page-subtitle">Panoramica iscrizioni e presenze</p>

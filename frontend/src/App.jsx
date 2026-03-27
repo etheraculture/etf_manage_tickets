@@ -15,15 +15,22 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
+function AdminRoute() {
+  const token = localStorage.getItem('ethera_admin_token');
+  if (token) return <Navigate to="/admin/dashboard" replace />;
+  return <AdminLogin />;
+}
+
 export default function App() {
   return (
     <Routes>
       {/* Pagina pubblica */}
-      <Route path="/" element={<RegistrationForm />} />
+      <Route path="/eft_2026" element={<RegistrationForm />} />
+      <Route path="/" element={<Navigate to="/eft_2026" replace />} />
       <Route path="/success" element={<RegistrationSuccess />} />
 
       {/* Admin login */}
-      <Route path="/admin" element={<AdminLogin />} />
+      <Route path="/admin" element={<AdminRoute />} />
 
       {/* Admin protette */}
       <Route
@@ -68,7 +75,7 @@ export default function App() {
       />
 
       {/* Catch-all */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to="/eft_2026" replace />} />
     </Routes>
   );
 }
