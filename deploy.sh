@@ -55,17 +55,17 @@ pm2 delete ethera-backend-eft-26 2>/dev/null || true
 pm2 delete ethera-frontend-eft-26 2>/dev/null || true
 
 # Clone o pull
-if [ ! -d "$SERVER_PATH/.git" ]; then
-  echo ""
-  echo "🆕 Primo deploy — clone del repo..."
-  mkdir -p "$SERVER_PATH"
-  git clone "$REPO_URL" "$SERVER_PATH"
-else
-  echo ""
-  echo "📥 Git pull..."
-  cd "$SERVER_PATH"
-  git pull origin main
-fi
+#if [ ! -d "$SERVER_PATH/.git" ]; then
+ # echo ""
+  #echo "🆕 Primo deploy — clone del repo..."
+  #mkdir -p "$SERVER_PATH"
+  #git clone "$REPO_URL" "$SERVER_PATH"
+#else
+  #echo ""
+  #echo "📥 Git pull..."
+  #cd "$SERVER_PATH"
+  #git pull origin main
+#fi
 
 # Scrivi il file .env dal contenuto base64
 if [ -n "$ENV_BASE64" ]; then
