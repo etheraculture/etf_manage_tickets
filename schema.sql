@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS registrazioni (
   scuola_id INT NOT NULL,
   classe VARCHAR(20) NOT NULL,
   rappresentante_istituto BOOLEAN NOT NULL DEFAULT FALSE,
+  telefono VARCHAR(20) DEFAULT NULL,
   email VARCHAR(255) NOT NULL,
   qr_code_data TEXT NOT NULL,
   email_inviata BOOLEAN DEFAULT FALSE,

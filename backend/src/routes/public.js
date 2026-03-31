@@ -51,6 +51,12 @@ router.post(
       return true;
     }),
     body('rappresentante_istituto').optional().isBoolean(),
+    body('telefono').custom((value, { req }) => {
+      if (req.body.rappresentante_istituto === true && (!value || value.trim().length < 5)) {
+        throw new Error('Telefono richiesto per i rappresentanti');
+      }
+      return true;
+    }),
   ],
   async (req, res) => {
     // Validazione
@@ -60,7 +66,7 @@ router.post(
     }
 
     try {
-      const { nome, cognome, eta, citta, email, isStudente, scuola_id, classe, rappresentante_istituto } = req.body;
+      const { nome, cognome, eta, citta, email, isStudente, scuola_id, classe, rappresentante_istituto, telefono } = req.body;
 
       let finalScuola = null;
       let finalClasse = null;
@@ -88,8 +94,8 @@ router.post(
       // Inserisci registrazione
       await pool.execute(
         `INSERT INTO registrazioni 
-         (codice_biglietto, nome, cognome, eta, citta, scuola_id, classe, rappresentante_istituto, email, qr_code_data)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         (codice_biglietto, nome, cognome, eta, citta, scuola_id, classe, rappresentante_istituto, telefono, email, qr_code_data)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           codiceBiglietto,
           nome.trim(),
@@ -99,6 +105,7 @@ router.post(
           finalScuola,
           finalClasse,
           (isStudente && rappresentante_istituto) ? 1 : 0,
+          (isStudente && rappresentante_istituto) ? telefono.trim() : null,
           email,
           qrCodeBase64,
         ]

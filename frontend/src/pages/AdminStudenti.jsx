@@ -22,7 +22,7 @@ export default function AdminStudenti() {
   const [editingStudent, setEditingStudent] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [form, setForm] = useState({
-    nome: '', cognome: '', email: '', classe: '', scuola_id: '', rappresentante_istituto: false
+    nome: '', cognome: '', email: '', classe: '', scuola_id: '', rappresentante_istituto: false, telefono: ''
   });
 
   useEffect(() => {
@@ -80,7 +80,8 @@ export default function AdminStudenti() {
       email: student.email,
       classe: student.classe || '',
       scuola_id: schoolObj ? schoolObj.id : '',
-      rappresentante_istituto: student.rappresentante_istituto === 1
+      rappresentante_istituto: student.rappresentante_istituto === 1,
+      telefono: student.telefono || ''
     });
   }
 
@@ -93,7 +94,8 @@ export default function AdminStudenti() {
         email: form.email,
         classe: form.classe,
         scuola_id: form.scuola_id || null,
-        rappresentante_istituto: form.rappresentante_istituto
+        rappresentante_istituto: form.rappresentante_istituto,
+        telefono: form.telefono
       });
       toast.success('Studente aggiornato');
       setEditingStudent(null);
@@ -213,7 +215,10 @@ export default function AdminStudenti() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', marginTop: '4px' }}>
                         {s.classe ? <span style={{ color: 'var(--color-gray-400)' }}>Classe {s.classe}</span> : null}
                         {s.rappresentante_istituto === 1 && (
-                          <Star size={16} fill="var(--color-warning)" color="var(--color-warning)" title="Rappresentante" />
+                          <>
+                            <Star size={16} fill="var(--color-warning)" color="var(--color-warning)" title="Rappresentante" />
+                            {s.telefono && <span style={{ color: 'var(--color-warning)', fontSize: '0.85rem' }}>{s.telefono}</span>}
+                          </>
                         )}
                       </div>
                     </td>
@@ -279,7 +284,7 @@ export default function AdminStudenti() {
                   {s.rappresentante_istituto === 1 && (
                     <div className="modern-card-info" style={{ color: 'var(--color-warning)' }} title="Rappresentante d'Istituto">
                       <Star size={18} fill="currentColor" />
-                      <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>Rappresentante</span>
+                      <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>Rappresentante {s.telefono && `(${s.telefono})`}</span>
                     </div>
                   )}
                 </div>
@@ -346,6 +351,13 @@ export default function AdminStudenti() {
                 <input type="checkbox" id="rappr" checked={form.rappresentante_istituto} onChange={e => setForm({...form, rappresentante_istituto: e.target.checked})} style={{ width: 18, height: 18 }} />
                 <label htmlFor="rappr" style={{ cursor: 'pointer', margin: 0, color: 'var(--color-white)', fontWeight: 500 }}>Rappresentante d'Istituto</label>
               </div>
+
+              {form.rappresentante_istituto && (
+                <div className="form-group" style={{ marginTop: 'var(--space-md)' }}>
+                  <label className="form-label">Telefono Rappresentante</label>
+                  <input type="tel" className="form-input" value={form.telefono} onChange={e => setForm({...form, telefono: e.target.value})} placeholder="Es: 333 1234567" />
+                </div>
+              )}
 
               <div className="modal-actions" style={{ marginTop: 'var(--space-xl)' }}>
                 <button type="button" className="btn btn-secondary" onClick={() => setEditingStudent(null)}>Annulla</button>

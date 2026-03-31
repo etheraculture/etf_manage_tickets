@@ -20,6 +20,7 @@ export default function RegistrationForm() {
     scuola_id: '',
     classe: '',
     rappresentante_istituto: false,
+    telefono: '',
     privacy_accepted: false,
   });
 
@@ -46,6 +47,9 @@ export default function RegistrationForm() {
     if (form.isStudente) {
       if (!form.scuola_id) e.scuola_id = 'Seleziona una scuola';
       if (!form.classe.trim()) e.classe = 'Classe richiesta';
+      if (form.rappresentante_istituto && (!form.telefono || form.telefono.trim().length < 5)) {
+        e.telefono = 'Cellulare richiesto per i rappresentanti';
+      }
     }
 
     if (!form.privacy_accepted) e.privacy_accepted = 'Devi accettare l\'informativa privacy';
@@ -101,9 +105,7 @@ export default function RegistrationForm() {
       <div className={styles.heroSection}>
         <div className={styles.heroVectors}></div>
         
-        <div style={{ position: 'absolute', top: '30px', left: '0', width: '100%', textAlign: 'center', zIndex: 10 }}>
-          <img src="/logo-eft.png" alt="EFT Logo" style={{ height: '70px', filter: 'brightness(0) invert(1)' }} />
-        </div>
+        {/* Logo rimosso come da richiesta */}
 
         <h1 className={styles.heroTitle}>
           ETHERA<br />
@@ -260,6 +262,21 @@ export default function RegistrationForm() {
                   />
                   <span className={styles.checkboxLabel}>Sono Rappresentante di Classe</span>
                 </label>
+
+                {form.rappresentante_istituto && (
+                  <div className={styles.formGroup} style={{ marginTop: '16px' }}>
+                    <label className={styles.formLabel}>Numero di Cellulare (Obbligatorio per Rappresentanti)</label>
+                    <input
+                      type="tel"
+                      className={`${styles.formInput} ${errors.telefono ? styles.formInputError : ''}`}
+                      style={{ background: '#ffffff' }}
+                      placeholder="Es: 333 1234567"
+                      value={form.telefono}
+                      onChange={e => handleChange('telefono', e.target.value)}
+                    />
+                    {errors.telefono && <span className={styles.errorText}>{errors.telefono}</span>}
+                  </div>
+                )}
               </div>
             )}
 
@@ -297,6 +314,8 @@ export default function RegistrationForm() {
           </form>
 
           <div style={{ textAlign: 'center', margin: '40px 0', paddingBottom: '24px' }}>
+            <img src="/logo-ethera.png" alt="Ethera Logo" style={{ height: '40px', marginBottom: '20px', opacity: 0.6 }} />
+            <br />
             <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8', fontSize: '0.85rem', textDecoration: 'underline' }}>
               Informativa completa sul Trattamento dei Dati (GDPR)
             </a>
