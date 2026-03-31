@@ -5,7 +5,7 @@ import styles from './RegistrationForm.module.css';
 export default function RegistrationSuccess() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { codice, qr, email, nome } = location.state || {};
+  const { codice, qr, email, nome, data_evento } = location.state || {};
 
   // Se mancano i dati, torna al form
   if (!codice || !qr) {
@@ -40,11 +40,11 @@ export default function RegistrationSuccess() {
         
         {/* Logo rimosso come da richiesta */}
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', zIndex: 2, marginTop: 'auto' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', marginBottom: '16px', zIndex: 2, marginTop: 'auto', width: '100%' }}>
           <div style={{ background: 'rgba(46, 204, 113, 0.2)', padding: '12px', borderRadius: '50%' }}>
             <CheckCircle size={32} color="#2ECC71" />
           </div>
-          <div className={styles.heroPreTitle} style={{ margin: 0, color: '#2ECC71' }}>ISCRIZIONE CONFERMATA</div>
+          <div className={styles.heroPreTitle} style={{ margin: 0, color: '#2ECC71', textAlign: 'center' }}>ISCRIZIONE CONFERMATA</div>
         </div>
         <h1 className={styles.heroTitle} style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}>
           CI VEDIAMO<br />
@@ -105,7 +105,7 @@ export default function RegistrationSuccess() {
                 <div style={{ flex: 1, textAlign: 'center', borderRight: '1px solid #e2e8f0' }}>
                   <Calendar size={20} color="#f97316" style={{ margin: '0 auto 8px' }} />
                   <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>DATA</div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0f172a' }}>8-10 APR</div>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0f172a' }}>{data_evento || '8-10 APR'}</div>
                 </div>
                 <div style={{ flex: 1, textAlign: 'center' }}>
                   <MapPin size={20} color="#f97316" style={{ margin: '0 auto 8px' }} />

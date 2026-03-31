@@ -81,6 +81,7 @@ export default function RegistrationForm() {
             qr: res.data.data.qr_code_base64,
             email: form.email,
             nome: form.nome,
+            data_evento: form.data_evento,
           },
         });
       }
