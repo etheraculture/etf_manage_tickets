@@ -40,7 +40,7 @@ async function getAccessToken() {
 /**
  * Genera il template HTML dell'email di conferma.
  */
-function buildEmailHtml(nome, codiceBiglietto) {
+function buildEmailHtml(nome, codiceBiglietto, dataEvento) {
   return `
 <!DOCTYPE html>
 <html lang="it">
@@ -105,7 +105,7 @@ function buildEmailHtml(nome, codiceBiglietto) {
                 <tr>
                   <td width="50%" style="border-right:2px solid #f1f5f9;text-align:center;">
                     <p style="margin:0 0 4px;color:#94a3b8;font-size:12px;font-weight:700;letter-spacing:1px;">DATA</p>
-                    <p style="margin:0;color:#0f172a;font-size:14px;font-weight:700;">8-10 Aprile 2026</p>
+                    <p style="margin:0;color:#0f172a;font-size:14px;font-weight:700;">${dataEvento || '8-10 Aprile 2026'}</p>
                   </td>
                   <td width="50%" style="text-align:center;">
                     <p style="margin:0 0 4px;color:#94a3b8;font-size:12px;font-weight:700;letter-spacing:1px;">LUOGO</p>
@@ -137,7 +137,7 @@ function buildEmailHtml(nome, codiceBiglietto) {
  * Invia l'email di conferma iscrizione via Microsoft Graph.
  * Fallisce silenziosamente se le credenziali non sono configurate.
  */
-async function sendConfirmationEmail(toEmail, nome, codiceBiglietto, qrBase64) {
+async function sendConfirmationEmail(toEmail, nome, codiceBiglietto, qrBase64, dataEvento) {
   try {
     const token = await getAccessToken();
     if (!token) {
@@ -145,7 +145,7 @@ async function sendConfirmationEmail(toEmail, nome, codiceBiglietto, qrBase64) {
       return false;
     }
 
-    const htmlContent = buildEmailHtml(nome, codiceBiglietto);
+    const htmlContent = buildEmailHtml(nome, codiceBiglietto, dataEvento);
     
     // Extract base64 raw data (remove "data:image/png;base64,")
     const base64Data = qrBase64.split(',')[1];

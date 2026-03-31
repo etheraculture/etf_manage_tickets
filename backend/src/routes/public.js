@@ -114,7 +114,7 @@ router.post(
       );
 
       // Invia email in background (non blocca la response)
-      sendConfirmationEmail(email, nome.trim(), codiceBiglietto, qrCodeBase64)
+      sendConfirmationEmail(email, nome.trim(), codiceBiglietto, qrCodeBase64, data_evento || '8 Aprile')
         .then(sent => {
           if (sent) {
             pool.execute(
