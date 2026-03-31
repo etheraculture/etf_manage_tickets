@@ -208,9 +208,9 @@ router.get('/studenti', authMiddleware, async (req, res) => {
         r.rappresentante_istituto,
         IF(c.id IS NOT NULL, 1, 0) as checkin_effettuato, 
         c.scansionato_at as checkin_timestamp,
-        r.created_at,
         r.classe,
         r.telefono,
+        r.data_evento,
         s.nome as scuola_nome
       FROM registrazioni r
       LEFT JOIN scuole s ON r.scuola_id = s.id
@@ -232,7 +232,7 @@ router.get('/studenti', authMiddleware, async (req, res) => {
 router.put('/studenti/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
-    const { nome, cognome, email, classe, scuola_id, rappresentante_istituto, telefono } = req.body;
+    const { nome, cognome, email, classe, scuola_id, rappresentante_istituto, telefono, data_evento } = req.body;
 
     const updates = [];
     const values = [];
@@ -244,6 +244,7 @@ router.put('/studenti/:id', authMiddleware, async (req, res) => {
     if (scuola_id !== undefined) { updates.push('scuola_id = ?'); values.push(scuola_id ? parseInt(scuola_id) : null); }
     if (rappresentante_istituto !== undefined) { updates.push('rappresentante_istituto = ?'); values.push(rappresentante_istituto ? 1 : 0); }
     if (telefono !== undefined) { updates.push('telefono = ?'); values.push(telefono ? telefono.trim() : null); }
+    if (data_evento !== undefined) { updates.push('data_evento = ?'); values.push(data_evento); }
 
     if (updates.length === 0) {
       return res.status(400).json({ error: 'Nessun campo da aggiornare' });

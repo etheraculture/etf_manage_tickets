@@ -38,9 +38,7 @@ export default function RegistrationSuccess() {
       <div className={styles.heroSection} style={{ minHeight: '40vh', paddingBottom: '40px' }}>
         <div className={styles.heroVectors}></div>
         
-        <div style={{ position: 'absolute', top: '30px', left: '0', width: '100%', textAlign: 'center', zIndex: 10 }}>
-          <img src="/logo-eft.png" alt="EFT Logo" style={{ height: '70px', filter: 'brightness(0) invert(1)' }} />
-        </div>
+        {/* Logo rimosso come da richiesta */}
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', zIndex: 2, marginTop: 'auto' }}>
           <div style={{ background: 'rgba(46, 204, 113, 0.2)', padding: '12px', borderRadius: '50%' }}>

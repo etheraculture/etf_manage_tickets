@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS registrazioni (
   classe VARCHAR(20) NOT NULL,
   rappresentante_istituto BOOLEAN NOT NULL DEFAULT FALSE,
   telefono VARCHAR(20) DEFAULT NULL,
+  data_evento VARCHAR(20) DEFAULT '8 Aprile',
   email VARCHAR(255) NOT NULL,
   qr_code_data TEXT NOT NULL,
   email_inviata BOOLEAN DEFAULT FALSE,

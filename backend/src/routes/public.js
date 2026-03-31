@@ -57,6 +57,7 @@ router.post(
       }
       return true;
     }),
+    body('data_evento').optional().isIn(['8 Aprile', '9 Aprile', '10 Aprile']).withMessage('Data non valida'),
   ],
   async (req, res) => {
     // Validazione
@@ -66,7 +67,7 @@ router.post(
     }
 
     try {
-      const { nome, cognome, eta, citta, email, isStudente, scuola_id, classe, rappresentante_istituto, telefono } = req.body;
+      const { nome, cognome, eta, citta, email, isStudente, scuola_id, classe, rappresentante_istituto, telefono, data_evento } = req.body;
 
       let finalScuola = null;
       let finalClasse = null;
@@ -94,8 +95,8 @@ router.post(
       // Inserisci registrazione
       await pool.execute(
         `INSERT INTO registrazioni 
-         (codice_biglietto, nome, cognome, eta, citta, scuola_id, classe, rappresentante_istituto, telefono, email, qr_code_data)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         (codice_biglietto, nome, cognome, eta, citta, scuola_id, classe, rappresentante_istituto, telefono, data_evento, email, qr_code_data)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           codiceBiglietto,
           nome.trim(),
@@ -106,6 +107,7 @@ router.post(
           finalClasse,
           (isStudente && rappresentante_istituto) ? 1 : 0,
           (isStudente && rappresentante_istituto) ? telefono.trim() : null,
+          data_evento || '8 Aprile',
           email,
           qrCodeBase64,
         ]

@@ -21,6 +21,7 @@ export default function RegistrationForm() {
     classe: '',
     rappresentante_istituto: false,
     telefono: '',
+    data_evento: '8 Aprile',
     privacy_accepted: false,
   });
 
@@ -130,6 +131,22 @@ export default function RegistrationForm() {
             <div className={styles.formSectionTitle}>
               <span className={styles.formSectionBadge}>STEP 01</span>
               Dati Personali
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Data dell'Evento</label>
+              <select
+                className={styles.formSelect}
+                value={form.data_evento}
+                onChange={e => handleChange('data_evento', e.target.value)}
+              >
+                <option value="8 Aprile">8 Aprile 2026</option>
+                <option value="9 Aprile">9 Aprile 2026</option>
+                <option value="10 Aprile">10 Aprile 2026</option>
+              </select>
+              <small style={{ color: '#64748b', marginTop: '8px', display: 'block' }}>
+                Scegli il giorno in cui preferisci partecipare.
+              </small>
             </div>
             
             <div className={styles.formGridRow}>
@@ -314,8 +331,7 @@ export default function RegistrationForm() {
           </form>
 
           <div style={{ textAlign: 'center', margin: '40px 0', paddingBottom: '24px' }}>
-            <img src="/logo-ethera.png" alt="Ethera Logo" style={{ height: '40px', marginBottom: '20px', opacity: 0.6 }} />
-            <br />
+            <img src="/logo-ethera.png" alt="Ethera Logo" style={{ height: '40px', marginBottom: '20px', opacity: 0.6, display: 'block', margin: '0 auto 20px auto' }} />
             <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8', fontSize: '0.85rem', textDecoration: 'underline' }}>
               Informativa completa sul Trattamento dei Dati (GDPR)
             </a>

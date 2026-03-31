@@ -14,6 +14,7 @@ export default function AdminStudenti() {
   const [filterScuola, setFilterScuola] = useState('tutte');
   const [filterClasse, setFilterClasse] = useState('tutte');
   const [filterRappresentante, setFilterRappresentante] = useState('tutti');
+  const [filterData, setFilterData] = useState('tutte');
   const [showFilters, setShowFilters] = useState(false);
 
   const [scuole, setScuole] = useState([]);
@@ -22,7 +23,7 @@ export default function AdminStudenti() {
   const [editingStudent, setEditingStudent] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [form, setForm] = useState({
-    nome: '', cognome: '', email: '', classe: '', scuola_id: '', rappresentante_istituto: false, telefono: ''
+    nome: '', cognome: '', email: '', classe: '', scuola_id: '', rappresentante_istituto: false, telefono: '', data_evento: ''
   });
 
   useEffect(() => {
@@ -67,8 +68,10 @@ export default function AdminStudenti() {
     let matchRappresentante = true;
     if (filterRappresentante === 'si') matchRappresentante = s.rappresentante_istituto === 1;
     if (filterRappresentante === 'no') matchRappresentante = s.rappresentante_istituto === 0;
-
-    return matchName && matchScuola && matchClasse && matchRappresentante;
+    
+    const matchData = filterData === 'tutte' || s.data_evento === filterData;
+    
+    return matchName && matchScuola && matchClasse && matchRappresentante && matchData;
   });
 
   function openEdit(student) {
@@ -81,7 +84,8 @@ export default function AdminStudenti() {
       classe: student.classe || '',
       scuola_id: schoolObj ? schoolObj.id : '',
       rappresentante_istituto: student.rappresentante_istituto === 1,
-      telefono: student.telefono || ''
+      telefono: student.telefono || '',
+      data_evento: student.data_evento || '8 Aprile'
     });
   }
 
@@ -95,7 +99,8 @@ export default function AdminStudenti() {
         classe: form.classe,
         scuola_id: form.scuola_id || null,
         rappresentante_istituto: form.rappresentante_istituto,
-        telefono: form.telefono
+        telefono: form.telefono,
+        data_evento: form.data_evento
       });
       toast.success('Studente aggiornato');
       setEditingStudent(null);
@@ -178,6 +183,15 @@ export default function AdminStudenti() {
                 <option value="no">Escludi Rappresentanti</option>
               </select>
             </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label" style={{ color: 'var(--color-gray-400)' }}>Data</label>
+              <select className="form-select" style={{ height: '48px' }} value={filterData} onChange={(e) => setFilterData(e.target.value)}>
+                <option value="tutte">Tutte le date</option>
+                <option value="8 Aprile">8 Aprile</option>
+                <option value="9 Aprile">9 Aprile</option>
+                <option value="10 Aprile">10 Aprile</option>
+              </select>
+            </div>
           </div>
         )}
       </div>
@@ -206,6 +220,7 @@ export default function AdminStudenti() {
                     <td>
                       <div style={{ fontWeight: 600, color: 'var(--color-white)', fontSize: '1.05rem', lineHeight: 1.2 }}>{s.cognome} {s.nome}</div>
                       <div style={{ color: 'var(--color-gray-400)', fontSize: '0.85rem', marginTop: '4px' }}>{s.email}</div>
+                      <div style={{ color: 'var(--color-teal)', fontSize: '0.8rem', fontWeight: 600, marginTop: '2px' }}>Data: {s.data_evento}</div>
                     </td>
                     <td>
                       <span style={{ fontFamily: 'monospace', letterSpacing: '2px', color: 'var(--color-teal-light)', fontWeight: 600 }}>{s.ticket_code}</span>
@@ -253,6 +268,7 @@ export default function AdminStudenti() {
                   <div>
                     <h4 className="modern-card-title">{s.cognome} {s.nome}</h4>
                     <div className="modern-card-subtitle">{s.email}</div>
+                    <div style={{ color: 'var(--color-teal)', fontSize: '0.85rem', fontWeight: 700, marginTop: '4px' }}>{s.data_evento}</div>
                   </div>
                   <div>
                     {s.checkin_effettuato ? (
@@ -345,6 +361,15 @@ export default function AdminStudenti() {
                   <label className="form-label">Classe (es. 5A)</label>
                   <input type="text" className="form-input" value={form.classe} onChange={e => setForm({...form, classe: e.target.value})} />
                 </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Data Evento</label>
+                <select className="form-select" value={form.data_evento} onChange={e => setForm({...form, data_evento: e.target.value})}>
+                  <option value="8 Aprile">8 Aprile</option>
+                  <option value="9 Aprile">9 Aprile</option>
+                  <option value="10 Aprile">10 Aprile</option>
+                </select>
               </div>
 
               <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', background: 'var(--color-bg-darker)', borderRadius: 'var(--radius-md)' }}>
